@@ -19,7 +19,7 @@ in review
 
 <div align="center">
   <a href="https://github.com/KamitaniLab/InterSiteNeuralCodeConversion/blob/main/">
-    <img src="figure/NCC.png" width="900" height="365">
+    <img src="figure/NCC.png">
   </a> 
 </div>
 
