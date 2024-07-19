@@ -6,7 +6,7 @@ The scripts of deep neural network (DNN) feature decoding from fMRI brain activi
 
 ### Decoding with PyFastL2LiR
 
-Example config file: [deeprecon_vgg19_pyfastl2lir_allunits.yaml](config/deeprecon_vgg19_pyfastl2lir_allunits.yaml)
+Example config file: [deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml](config/deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml)
 
 - Training: `featdec_fastl2lir_train.py`
 - Test (prediction): `featdec_fastl2lir_predict.py`
