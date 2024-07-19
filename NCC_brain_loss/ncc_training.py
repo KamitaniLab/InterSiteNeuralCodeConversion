@@ -210,11 +210,6 @@ def train_NCconverter(x, y, x_labels, y_labels,
     print('Training')
     # Model training
     # conversion matrix for whole VC.
-    # M = np.zeros((x_normalized.shape[1] + 1, y_normalized.shape[1]))
-    # training for each brain area.
-    # for k in embedded_idxs_src.keys():
-    #     idxs_sub_src = embedded_idxs_src[k]
-    #     idxs_sub_trg = embedded_idxs_trg[k]
 
     model = FastL2LiR()
     # All voxels are used in training.
@@ -224,12 +219,6 @@ def train_NCconverter(x, y, x_labels, y_labels,
     b = model.b.flatten()  # b in fact has no effect as the data has been normalized, but it is kept for consistency.
     b= b.reshape(1,-1)
     M = np.vstack([W, b])
-    # embed in the VC conversion matrix
-    # grid = tuple(np.meshgrid(idxs_sub_src, idxs_sub_trg, indexing='ij'))
-    # M_grid = M[grid]
-    # W[M_grid != 0.0] = 0.0
-    # M[grid] += W
-    # M[-1, idxs_sub_trg] += b
 
     # Save chunk results
     result_model = os.path.join(output, 'NCconverter.mat')
