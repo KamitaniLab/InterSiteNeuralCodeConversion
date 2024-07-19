@@ -1,8 +1,6 @@
 
 '''
-Script for training the neural code converters.
-Even though the left and right hemisphere (and also, eash brain area) are trained separately,
-the matrices for each brain area are aggregated to a matrix for the whole VC.
+Script for training the neural code converters using brain loss.
 '''
 
 import os
