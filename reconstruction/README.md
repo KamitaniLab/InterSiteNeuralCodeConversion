@@ -26,7 +26,7 @@ iCNN reconstruction:
 Run the following command.
 
 ``` shellsession
-$ python recon_icnn_image_gd.py config/recon_icnn_vgg19_relu7generator_gd_1000iter_decoded_ImageNet.yaml
+$ python recon_icnn_image_gd.py config/recon_icnn_vgg19_relu7generator_gd_200iter_decoded_ImageNet.yaml
 ```
 
 This will output reconstructed images in `data/reconstruction/icnn/`.
