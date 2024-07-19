@@ -1,5 +1,4 @@
 import torch.nn as nn
-import torch.nn.functional as F
 
 class Converter(nn.Module):
     def __init__(self, input_nc, output_nc):
