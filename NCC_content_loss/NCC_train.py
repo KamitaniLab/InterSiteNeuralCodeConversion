@@ -7,11 +7,11 @@ import torch
 import random
 import concurrent
 from concurrent.futures import ProcessPoolExecutor
-from models import Generator
-from utils_new import fastl2lir_parameter, dnn_chunk_get
-from utils_new import LambdaLR,PathBuilder
-from utils_new import Logger
-from utils_new import test_fastl2lir_div,compute_layer_weights
+from models import Converter
+from utils import fastl2lir_parameter, dnn_chunk_get
+from utils import LambdaLR,PathBuilder
+from utils import Logger
+from utils import test_fastl2lir_div,compute_layer_weights
 import bdpy
 import os
 import numpy as np
@@ -43,7 +43,7 @@ def select_samples(x, x_labels,path_src, num_sample):
     else:
         rep = int(num_sample / 1200)
 
-    # 选择需要的重复
+
     tmp = np.zeros(5, dtype=bool)
     tmp[:rep] = True
     sel = np.tile(tmp, 1200)
@@ -102,7 +102,7 @@ def prepare_dnn_features(features_list, path_trg, dnn_index, chunk_dir, current_
 
 # initialize_network_and_optimizer
 def initialize_network_and_optimizer(input_nc, output_nc, opt):
-    model = Generator(input_nc, output_nc)
+    model = Converter(input_nc, output_nc)
     if opt.cuda and torch.cuda.is_available():
         model.cuda()
     print(model)

@@ -5,13 +5,13 @@ import os
 from torch.autograd import Variable
 import torch
 from time import time
-from models import Generator
+from models import Converter
 import numpy as np
 from bdpy.dataform import Features, load_array, save_array
 from bdpy.util import makedir_ifnot, get_refdata
-from utils_new import predict,fastl2lir_parameter,test_fastl2lir_revise
+from utils import fastl2lir_parameter,test_fastl2lir_revise
 import itertools,bdpy
-from utils_new import PathBuilder
+from utils import PathBuilder
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchSize', type=int, default=50, help='size of the batches')
@@ -45,7 +45,6 @@ vgg_network = 'caffe/VGG_ILSVRC_19_layers'
 src_decoder_dir = '../srcdecoder_dir'
 trg_decoder_dir = '../trgdecoder_dir'
 
-
 label_name = 'image_index'
 rois_list = {
     'VC': 'ROI_VC =1',
@@ -55,7 +54,6 @@ rois_list = {
     # 'V4': 'ROI_hV4 = 1',
     # 'HVC': 'ROI_HVC = 1'
 }
-
 
 for src,trg in itertools.permutations(subjects_list.keys(),2):
     for roi in rois_list:
@@ -81,16 +79,14 @@ for src,trg in itertools.permutations(subjects_list.keys(),2):
         print(x_mean_trg.shape)
         output_nc = x_mean_trg.shape[1]
 
-    ###### Definition of variables ######
-    # Networks
-        netG_A2B = Generator(input_nc, output_nc)
+        # Loaded the trained model
+        netG_A2B = Converter(input_nc, output_nc)
 
         # if opt.cuda:
         netG_A2B.cuda()
 
-        converter_dir = os.path.join('output', conversion)
-        ###################################
         # Load state dicts
+        converter_dir = os.path.join('output', conversion)
         device = torch.device('cuda:0')
         netG_A2B.load_state_dict(torch.load(os.path.join(converter_dir,roi,'model.pth'),map_location=device))
 
@@ -102,24 +98,15 @@ for src,trg in itertools.permutations(subjects_list.keys(),2):
         ones = Variable(Tensor(opt.batchSize, 1).fill_(1.0), requires_grad=False)
         # if opt.cuda else torch.Tensor
 
-
         x_test_labels_unique = np.unique(x_labels)
         x_averaged = np.vstack([np.mean(x[(np.array(x_labels) == lb).flatten(), :], axis=0) for lb in x_test_labels_unique])
-
-        ##############################
-
         x_item = (x_averaged - x_mean_src)/x_norm_src
-        #
         real_A = Variable(Tensor(x_item),requires_grad=False)
-        #
-        # Generate output
 
+        # Converte brain activity
         fake_B = netG_A2B(real_A)
 
         pred_B = fake_B.detach().cpu().numpy()
-
-
-
         y_pred = x_norm_trg * pred_B + x_mean_trg
 
         # Image features
@@ -129,7 +116,7 @@ for src,trg in itertools.permutations(subjects_list.keys(),2):
                          'conv5_1', 'conv5_2', 'conv5_3', 'conv5_4',
                          'fc6', 'fc7', 'fc8'][::-1]
 
-
+        # feature decoding
         for vgg_feat in features_list:
 
             start_time = time()
@@ -141,7 +128,6 @@ for src,trg in itertools.permutations(subjects_list.keys(),2):
             results_dir_prediction = os.path.join(results_dir_root, conversion, vgg_network, vgg_feat, "target", roi)
 
             makedir_ifnot(results_dir_prediction)
-            # #
             for i, label in enumerate(x_test_labels_unique):
                 # Predicted features
                 feature = np.array([pred_dnn[i,]])  # To make feat shape 1 x M x N x ...
