@@ -16,7 +16,6 @@ import bdpy
 import os
 import numpy as np
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--iteration', type=int, default=0, help='starting iteration')
 parser.add_argument('--n_iterations', type=int, default=1024, help='number of iterations of training')
@@ -73,7 +72,6 @@ def select_samples(x, x_labels,path_src, num_sample):
     x = (x - x_mean_src) / x_norm_src
 
     return x, x_labels
-
 
 def process_layer(layer, path_trg, dnn_index, chunk_dir, current_indices):
     dnn_chunk_path = os.path.join(chunk_dir, layer)

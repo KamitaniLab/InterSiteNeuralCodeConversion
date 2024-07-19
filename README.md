@@ -15,7 +15,7 @@
   <p align="center">
 Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, Misato Tanaka, Yukiyasu Kamitani
 <p align="center">
-in review
+
 
 <div align="center">
   <a href="https://github.com/KamitaniLab/InterSiteNeuralCodeConversion/blob/main/">
