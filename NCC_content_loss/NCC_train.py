@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-#this one
 import argparse
 import itertools
 from torch.autograd import Variable
@@ -41,7 +40,6 @@ def select_samples(x, x_labels,path_src, num_sample):
         rep = 1
     else:
         rep = int(num_sample / 1200)
-
 
     tmp = np.zeros(5, dtype=bool)
     tmp[:rep] = True

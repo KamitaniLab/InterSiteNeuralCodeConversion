@@ -22,8 +22,6 @@ import pandas as pd
 def main():
     # Read settings ----------------------------------------------------
     converter_param = './params/converter_params_6000_VC.csv'
-    # To use converter for all subject pairs and with varying training samples, uncommented the line below.
-    # converter_param = './params/converter_params.csv'
     df_param = pd.read_csv(converter_param)
     # Brain data
     brain_dir = '../data/fmri'
@@ -119,8 +117,6 @@ def main():
             if dist.islocked_lock():
                 print('%s is already running. Skipped.' % analysis_id)
                 continue
-
-
 
             # Preparing data
             # --------------

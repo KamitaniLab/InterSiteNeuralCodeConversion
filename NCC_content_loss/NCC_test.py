@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import argparse
 import os
 from torch.autograd import Variable

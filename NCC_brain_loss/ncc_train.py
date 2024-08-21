@@ -24,10 +24,7 @@ from fastl2lir import FastL2LiR
 
 def main():
     # Data settings ----------------------------------------------------
-
     # Brain data
-    # converter_param = './params/converter_params_1conversion.csv'
-    # # To train_bs6000 converter for all subject pairs and with varying training samples, uncommented the line below.
     converter_param = './params/converter_params_6000_VC.csv'
     df_param = pd.read_csv(converter_param)
     brain_dir = '../data/fmri'
