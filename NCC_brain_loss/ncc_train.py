@@ -25,7 +25,7 @@ from fastl2lir import FastL2LiR
 def main():
     # Data settings ----------------------------------------------------
     # Brain data
-    converter_param = './params/converter_params_6000_VC.csv'
+    converter_param = './params/converter_params_VC.csv'
     df_param = pd.read_csv(converter_param)
     brain_dir = '../data/fmri'
     subjects_list = {'sub01': 'sub-01_NaturalImageTraining.h5',

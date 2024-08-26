@@ -39,8 +39,6 @@ Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, Misato T
 [license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 
 ## Getting Started
-This repository provides tools for training neural code converters, and testing these converters for decoding decoding and image reconstruction from brain activity.
-
 ### Build Environment
 
 Step1: Navigate to the base directory and create the environment by running the following command.
@@ -51,6 +49,19 @@ Step2: Activate the environment.
   ```sh
   conda activate NCC
   ```
+### Download Data
+
+To utilize this project, you'll need to download the required data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578) and organize the dataset appropriately.
+
+You can navigate to the `data` directory and download the demo data with the following commands:
+ ```sh
+# To download the training fMRI data:
+python download.py fmri_training
+
+# Or to download the test fMRI data:
+python download.py fmri_test
+ ```
+
 ## Usage
 ### Pre-train Decoders
 

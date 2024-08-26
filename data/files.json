@@ -1,0 +1,73 @@
+{
+    "fmri_training": {
+        "zip": false,
+        "save_in": "./fmri",
+        "files": [
+            {"md5sum": "591734b434040da2a8b6f7e9239e7c08",
+             "name": "sub-01_NaturalImageTraining.h5",
+             "url": "https://figshare.com/ndownloader/files/32712197"},
+
+            {"md5sum": "58a56e9d67d485f3b92ee55d5600cf10",
+             "name": "sub-02_NaturalImageTraining.h5",
+             "url": "https://figshare.com/ndownloader/files/32712488"},
+
+            {"md5sum": "e56d4e0185d4e42246cbfa5e314e1545",
+             "name": "sub-03_NaturalImageTraining.h5",
+             "url": "https://figshare.com/ndownloader/files/32718017"},
+
+            {"md5sum": "0b29c97b630c98ea937042241103554f",
+             "name": "sub-04_NaturalImageTraining.h5",
+             "url": "https://figshare.com/ndownloader/files/32718266"},
+
+            {"md5sum": "be2ab2374772e1622b600c7cc4545424",
+             "name": "sub-05_NaturalImageTraining.h5",
+             "url": "https://figshare.com/ndownloader/files/32719550"}
+        ]
+    },
+    "fmri_test": {
+        "zip": false,
+        "save_in": "./fmri",
+        "files": [
+            {"md5sum": "73f3880f263c610e5b4bf1d912bad498",
+             "name": "sub-01_NaturalImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32712131"},
+
+            {"md5sum": "b16c69be57d4e2543696aec58241f9e1",
+             "name": "sub-01_ArtificialImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32709608"},
+
+            {"md5sum": "885ad6c29fd36cb164426e150c9cd9d5",
+             "name": "sub-02_NaturalImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32712407"},
+
+            {"md5sum": "3c4e8341f650dc65f6a6c06f7dd0f7cc",
+             "name": "sub-02_ArtificialImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32712506"},
+
+            {"md5sum": "791b4f627cc72f80698b297f59e72d8d",
+             "name": "sub-03_NaturalImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32717852"},
+
+            {"md5sum": "7373bb3709dcfbc0a3dc7c8dc6574d55",
+             "name": "sub-03_ArtificialImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32718050"},
+
+            {"md5sum": "aaa37f18f64a415718d882ef52ea259e",
+             "name": "sub-04_NaturalImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32718092"},
+
+            {"md5sum": "df01462b778b83e6fd669779b9ae5e92",
+             "name": "sub-04_ArtificialImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32718284"},
+
+            {"md5sum": "3d17fe39b18aae25caa945704e165917",
+             "name": "sub-05_NaturalImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32719436"},
+
+            {"md5sum": "2b2628a176bc618440553c5f885a03c7",
+             "name": "sub-05_ArtificialImageTest.h5",
+             "url": "https://figshare.com/ndownloader/files/32719568"}
+        ]
+    }
+
+}

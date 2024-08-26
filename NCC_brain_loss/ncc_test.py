@@ -21,7 +21,7 @@ import pandas as pd
 
 def main():
     # Read settings ----------------------------------------------------
-    converter_param = './params/converter_params_6000_VC.csv'
+    converter_param = './params/converter_params_VC.csv'
     df_param = pd.read_csv(converter_param)
     # Brain data
     brain_dir = '../data/fmri'
@@ -131,7 +131,6 @@ def main():
             # Target features and image labels (file names)
             y = data_features.get_features(feat)
             y_labels = data_features.index
-            image_names = data_features.labels
 
             # Get test data
             x_test = x

@@ -8,13 +8,14 @@ import concurrent
 from concurrent.futures import ProcessPoolExecutor
 from models import Converter
 from utils import fastl2lir_parameter, dnn_chunk_get
-from utils import LambdaLR,PathBuilder
+from utils import LambdaLR, PathBuilder
 from utils import Logger
-from utils import test_fastl2lir_div,compute_layer_weights
+from utils import test_fastl2lir_div, compute_layer_weights
 import bdpy
 import os
 import numpy as np
 
+# Argument parser setup
 parser = argparse.ArgumentParser()
 parser.add_argument('--iteration', type=int, default=0, help='starting iteration')
 parser.add_argument('--n_iterations', type=int, default=1024, help='number of iterations of training')
@@ -29,13 +30,16 @@ parser.add_argument('--gpu_id', type=str, default='0', help='gpu id')
 # Set the global Tensor type
 Tensor = torch.FloatTensor
 
-def select_samples(x, x_labels,path_src, num_sample):
-    # First, sort the data
+def select_samples(x, x_labels, path_src, num_sample):
+    """
+    Select and normalize samples based on the number of required samples.
+    """
+    # Sort the data based on labels
     x_index = np.argsort(x_labels.flatten())
     x_labels = x_labels[x_index]
     x = x[x_index, :]
 
-    # If only a sample size of less than 1200 is required, we choose the first replicate
+    # Determine the number of repetitions based on sample size
     if num_sample < 1200:
         rep = 1
     else:
@@ -47,24 +51,18 @@ def select_samples(x, x_labels,path_src, num_sample):
     x_labels = x_labels[sel]
     x = x[sel]
 
-    # If you only need a sample size of less than 1200, choose different categories of samples to avoid bias
-    # Here we have 150 image categories with 8 images per category
-
+    # Handle different sample sizes to avoid bias in category representation
     if num_sample == 300:
-        # 2 images per category
         x = x[0::4]
         x_labels = x_labels[0::4]
     elif num_sample == 600:
-        # 4 images per class
         x = np.vstack((x[0::4], x[1::4]))
         x_labels = np.vstack((x_labels[0::4], x_labels[1::4]))
-
     elif num_sample == 900:
-        # 6 images per category
         x = np.vstack((x[0::4], x[1::4], x[2::4]))
         x_labels = np.vstack((x_labels[0::4], x_labels[1::4], x_labels[2::4]))
 
-    # Normalize
+    # Normalize the samples
     src_mean_std_dir = path_src.build_model_path('fc6')
     x_mean_src, x_norm_src, _, _, _, _ = fastl2lir_parameter(src_mean_std_dir, chunk_axis=1)
     x = (x - x_mean_src) / x_norm_src
@@ -72,12 +70,16 @@ def select_samples(x, x_labels,path_src, num_sample):
     return x, x_labels
 
 def process_layer(layer, path_trg, dnn_index, chunk_dir, current_indices):
+    """
+    Process a specific DNN layer to extract features and normalize them.
+    """
     dnn_chunk_path = os.path.join(chunk_dir, layer)
     dnn = dnn_chunk_get(dnn_chunk_path, current_indices[layer])
 
     dnn_mean_std_dir = path_trg.build_model_path(layer)
     _, _, y_mean_trg, y_norm_trg, _, _ = fastl2lir_parameter(dnn_mean_std_dir, chunk_axis=1)
 
+    # Normalize layer features based on layer type (convolutional or fully connected)
     if "conv" in layer:
         layer_features = (dnn[dnn_index] - y_mean_trg[:, current_indices[layer], :, :]) / y_norm_trg[:, current_indices[layer], :, :]
     elif "fc" in layer:
@@ -86,18 +88,21 @@ def process_layer(layer, path_trg, dnn_index, chunk_dir, current_indices):
     return layer, layer_features
 
 def prepare_dnn_features(features_list, path_trg, dnn_index, chunk_dir, current_indices):
-
+    """
+    Prepare features for all specified DNN layers concurrently.
+    """
     all_dnn_features = {}
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(process_layer, layer, path_trg, dnn_index, chunk_dir, current_indices) for layer in features_list]
         for future in concurrent.futures.as_completed(futures):
             layer, layer_features = future.result()
             all_dnn_features[layer] = layer_features
-            # print(layer, layer_features.shape)
     return all_dnn_features
 
-# initialize_network_and_optimizer
 def initialize_network_and_optimizer(input_nc, output_nc, opt):
+    """
+    Initialize the neural network and optimizer.
+    """
     model = Converter(input_nc, output_nc)
     if opt.cuda and torch.cuda.is_available():
         model.cuda()
@@ -106,14 +111,19 @@ def initialize_network_and_optimizer(input_nc, output_nc, opt):
     lr_scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=LambdaLR(opt.n_iterations, opt.iteration, opt.decay_iteration).step)
     return model, optimizer, lr_scheduler
 
-# save the model
 def save_model(model, save_path):
+    """
+    Save the trained model to the specified path.
+    """
     dir_path = os.path.dirname(save_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     torch.save(model.state_dict(), save_path)
 
 def prepare_indices(num_iterations, features_list):
+    """
+    Prepare indices for selecting DNN features during training.
+    """
     chunks_number = {
         'conv1_1': 64, 'conv1_2': 64,
         'conv2_1': 128, 'conv2_2': 128,
@@ -125,10 +135,10 @@ def prepare_indices(num_iterations, features_list):
     prepared_indices = {}
     for layer in features_list:
         if "fc" in layer:
-            # For the fully connected layer, the index is all zeros
+            # Fully connected layers use a fixed index
             prepared_indices[layer] = [0] * num_iterations
         elif layer in chunks_number:
-            # For convolutional layers, a random index is generated based on the number of channels in the layer
+            # Convolutional layers use random indices for selecting feature maps
             current_indices = random.sample(range(chunks_number[layer]), chunks_number[layer])
             indices = []
             for i in range(num_iterations):
@@ -139,7 +149,9 @@ def prepare_indices(num_iterations, features_list):
     return prepared_indices
 
 def allocate_memory_for_layers(features_list, path_trg, dnn_index, chunk_dir, current_indices, opt):
-    # Use prepare_dnn_features to get the shape of each layer
+    """
+    Allocate memory for input and target DNN layers based on initial features.
+    """
     initial_chunk_dnn_features = prepare_dnn_features(features_list, path_trg, dnn_index, chunk_dir, current_indices)
 
     # Pre-allocate memory
@@ -155,13 +167,16 @@ def allocate_memory_for_layers(features_list, path_trg, dnn_index, chunk_dir, cu
     return input_dnn_layers
 
 def chunk_process_batch(model, real_A, chunk_dnn_features, input_dnn_layers, features_list, criterion_mse, path_trg, current_indices):
-    # generate loss
+    """
+    Process a batch of data, compute the loss, and backpropagate.
+    """
+    # Generate predictions
     fake_B = model(real_A)
 
     # Initialize total loss for this batch
     total_loss = 0
 
-    # calculate weight for different layers
+    # Calculate weight for different layers
     layer_weights = compute_layer_weights(chunk_dnn_features, features_list)
 
     for layer in features_list:
@@ -181,47 +196,46 @@ def chunk_process_batch(model, real_A, chunk_dnn_features, input_dnn_layers, fea
     return total_loss
 
 def converter_training(subject_src, subject_trg, data_brain, rois_list, roi, vgg_dir, features_list, src_network, trg_network, src_dir, trg_dir, chunks_index_dict, opt):
-
+    """
+    Train the converter model for a specific subject and ROI.
+    """
     conversion = f"{subject_src}_2_{subject_trg}"
     print(f"Conversion: {conversion}")
 
     x = data_brain[subject_src].select(rois_list[roi])
-    x_labels = data_brain[subject_src].select('image_index')  # src_brain data
+    x_labels = data_brain[subject_src].select('image_index')  # Source brain data
 
-    ### The directory of mean and std
+    # Define paths for source and target models
     path_src = PathBuilder(src_dir, src_network, subject_src, roi)
     path_trg = PathBuilder(trg_dir, trg_network, subject_trg, roi)
 
-    ### load the dimension of target brain activities instead of target brain data
+    # Load target brain activity dimensions instead of data
     x_mean_trg, _, _, _, _, _ = fastl2lir_parameter(path_trg.build_model_path('fc6'), chunk_axis=1)
     print(x_mean_trg.shape)
     input_nc = x.shape[1]
     output_nc = x_mean_trg.shape[1]
 
-    # brain activity processing: select_samples and normarlized it
+    # Process brain activity: select and normalize samples
     x, brain_labels = select_samples(x, x_labels, path_src, opt.number_size)
     print(brain_labels.shape)
 
-    # align labels of brain activity and dnn
+    # Align labels of brain activity and DNN
     dnn_labels = np.unique(brain_labels)
     dnn_index = np.array([np.where(np.array(dnn_labels) == xl) for xl in brain_labels]).flatten()
 
-    ###### Initialize thte neural network ######
+    # Initialize the neural network
     model, optimizer, lr_scheduler = initialize_network_and_optimizer(input_nc, output_nc, opt)
     criterion_mse = torch.nn.MSELoss(reduction='sum')
 
-    # Inputs & targets memory allocation
-    # Get the initial settings for the current index
+    # Allocate memory for inputs & targets
     initial_indices = {layer: chunks_index_dict[layer][0] for layer in features_list}
-    # Get the shape of each DNN layers
     input_dnn_layers = allocate_memory_for_layers(features_list, path_trg, dnn_index, vgg_dir, initial_indices, opt)
 
     real_A = Variable(Tensor(x), requires_grad=False)
-    # # Loss plot
+    # Loss logger
     logger = Logger(opt.n_iterations, 1)
 
     for iteration in range(opt.iteration, opt.n_iterations):
-
         current_indices = {layer: chunks_index_dict[layer][iteration] for layer in features_list}
 
         # DNN feature processing
@@ -229,38 +243,43 @@ def converter_training(subject_src, subject_trg, data_brain, rois_list, roi, vgg
 
         optimizer.zero_grad()
         total_loss = chunk_process_batch(model, real_A, chunk_dnn_features, input_dnn_layers, features_list, criterion_mse, path_trg, current_indices)
-        total_loss.backward() #Backward and optimize after accumulating losses from all layers
+        total_loss.backward()  # Backward and optimize after accumulating losses from all layers
         optimizer.step()
 
-        # Progress report for the batch
+        # Log the progress
         logger.log({f'Deeprecon_{conversion}_': total_loss})
         # Update learning rates
         lr_scheduler.step()
-        # Save models checkpoints
+        # Save the model checkpoint
         if iteration == opt.n_iterations - 1:
             save_model_path = os.path.join('output', conversion, roi, 'model.pth')
             save_model(model, save_model_path)
 
     return model
+
 ##############################################################################################################
 def main():
+    """
+    Main function to set up training environment and start the converter training process.
+    """
     global Tensor
     opt = parser.parse_args()
 
+    # Set random seeds for reproducibility
     seed = 42
     torch.manual_seed(seed)
     random.seed(seed)
     np.random.seed(seed)
 
+    # Set up CUDA if available
     if opt.cuda and torch.cuda.is_available():
         torch.cuda.set_device(int(opt.gpu_id))
         torch.cuda.manual_seed_all(seed)
         Tensor = torch.cuda.FloatTensor
-
     else:
         Tensor = torch.FloatTensor
 
-    # brain data
+    # Load brain data
     brain_dir = '../data/fmri'
     subjects_list = {
         'sub01': 'sub-01_NaturalImageTraining.h5',
@@ -281,26 +300,28 @@ def main():
         # 'HVC': 'ROI_HVC = 1'
     }
 
-    # The decoder of the directory
+    # Define directories for decoders
     src_decoder_dir = '../srcdecoder_dir'
     trg_decoder_dir = '../trgdecoder_dir'
 
-    # dnn feature
+    # DNN feature directory
     vgg_dir = ''
 
     src_network = 'caffe/VGG_ILSVRC_19_layers'
     trg_network = 'caffe/VGG_ILSVRC_19_layers'
 
-    features_list = [   'conv1_1', 'conv1_2',
-                        'conv2_1', 'conv2_2',
-                        'conv3_1', 'conv3_2', 'conv3_3', 'conv3_4',
-                        'conv4_1', 'conv4_2', 'conv4_3', 'conv4_4',
-                        'conv5_1', 'conv5_2', 'conv5_3',
-                        'conv5_4',
-                        'fc6', 'fc7','fc8'][::-1]
+    features_list = ['conv1_1', 'conv1_2',
+                     'conv2_1', 'conv2_2',
+                     'conv3_1', 'conv3_2', 'conv3_3', 'conv3_4',
+                     'conv4_1', 'conv4_2', 'conv4_3', 'conv4_4',
+                     'conv5_1', 'conv5_2', 'conv5_3',
+                     'conv5_4',
+                     'fc6', 'fc7', 'fc8'][::-1]
 
-    chunks_index_dict= prepare_indices(opt.n_iterations,features_list)
+    # Prepare indices for DNN features
+    chunks_index_dict = prepare_indices(opt.n_iterations, features_list)
 
+    # Train the converter model for each subject pair and ROI
     for src, trg in itertools.permutations(subjects_list.keys(), 2):
         conversion = src + '_2_' + trg
         print('Source: %s' % src)
@@ -310,7 +331,7 @@ def main():
         for roi in rois_list:
             print('ROI: %s' % roi)
             folder_path = os.path.join('output', conversion, roi)
-            # first check converter is trained or not
+            # Check if the converter has been trained before
             if os.path.exists(folder_path) and os.path.isdir(folder_path):
                 files = os.listdir(folder_path)
                 if len(files) > 0:
@@ -319,9 +340,8 @@ def main():
             else:
                 print("converter is training")
 
+            # Train the converter model
             converter_training(src, trg, data_brain, rois_list, roi, vgg_dir, features_list, src_network, trg_network, src_decoder_dir, trg_decoder_dir, chunks_index_dict, opt)
 
 if __name__ == '__main__':
     main()
-
-
