@@ -8,9 +8,15 @@ The scripts of deep neural network (DNN) feature decoding from fMRI brain activi
 
 Example config file: [deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml](config/deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml)
 
-- Training: `python featdec_fastl2lir_train.py deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml`
-- Test (prediction): `python featdec_fastl2lir_predict.py deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml`
-
+- To train the decoders，use the following command:
+```sh
+python featdec_fastl2lir_train.py config/deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml
+ ```
+  
+- To decode DNN features from brain activities (prediction), use the following command:
+```sh
+python featdec_fastl2lir_predict.py config/deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml
+ ```
 
 ## References
 

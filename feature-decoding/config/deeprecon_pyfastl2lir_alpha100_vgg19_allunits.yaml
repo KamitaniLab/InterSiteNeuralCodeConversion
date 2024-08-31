@@ -2,43 +2,25 @@
 
 training fmri:
   sub-01:
-    - ./data/fmri/sub-01_ImageNetTraining_fmriprep_volume_native.h5
+    - ./data/fmri/sub-01_NaturalImageTraining.h5
   # sub-02:
-  #   - ./data/fmri/sub-02_ImageNetTraining_fmriprep_volume_native.h5
+  #   - ./data/fmri/sub-02_NaturalImageTraining.h5
   # sub-03:
-  #   - ./data/fmri/sub-03_ImageNetTraining_fmriprep_volume_native.h5
+  #   - ./data/fmri/sub-03_NaturalImageTraining.h5
 
 test fmri:
   sub-01:
-    - ./data/fmri/sub-01_ImageNetTest_fmriprep_volume_native.h5
+    - ./data/fmri/sub-01_NaturalImageTest.h5
   # sub-02:
-  #   - ./data/fmri/sub-02_ImageNetTest_fmriprep_volume_native.h5
+  #   - ./data/fmri/sub-02_NaturalImageTest.h5
   # sub-03:
-  #   - ./data/fmri/sub-03_ImageNetTest_fmriprep_volume_native.h5
+  #   - ./data/fmri/sub-03_NaturalImageTest.h5
 
 rois:
-  V1:  ROI_V1 = 1
-  V2:  ROI_V2 = 1
-  V3:  ROI_V3 = 1
-  V4:  ROI_hV4 = 1
-  LOC: ROI_LOC = 1
-  FFA: ROI_FFA = 1
-  PPA: ROI_PPA = 1
-  LVC: ROI_LVC = 1
-  HVC: ROI_HVC = 1
   VC:  ROI_VC = 1
 
 # The number of voxels used in feature decoding
 rois voxel num:
-  V1:  500
-  V2:  500
-  V3:  500
-  V4:  500
-  LOC: 500
-  FFA: 500
-  PPA: 500
-  LVC: 500
-  HVC: 500
   VC:  500
 
 label key:
@@ -79,11 +61,11 @@ layers:
 # Feature decoding ###########################################################
 
 feature decoder dir:
-  ./data/feature_decoders/ImageNetTraining/deeprecon_fmriprep_pyfastl2lir_alpha100_allunits
+  ./data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits
 
 # Decoded features
 decoded feature dir:
-  ./data/decoded_features/ImageNetTest/deeprecon_fmriprep_pyfastl2lir_alpha100_allunits
+  ./data/pre-trained/decoded_features/ImageNetTest/deeprecon_fmriprep_pyfastl2lir_alpha100_allunits
 
 # Learning parameters
 alpha: 100

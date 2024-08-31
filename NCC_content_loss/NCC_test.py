@@ -110,7 +110,7 @@ def convert_brain_activity(subject_src, subject_trg, roi, data_brain, rois_list,
     # Decode features and save results
     for vgg_feat in features_list:
         start_time = time()
-        pred_dnn = test_fastl2lir_revise(path_trg.build_model_path(vgg_feat), path_src.build_model_path(vgg_feat), y_pred)
+        pred_dnn = test_fastl2lir_revise(path_trg.build_model_path(vgg_feat), path_trg.build_model_path(vgg_feat), y_pred)
         print(f'Total elapsed time (prediction): {time() - start_time:.6f} seconds')
         print(f'VGG feature: {vgg_feat}')
 
@@ -140,8 +140,8 @@ def main():
 
     # Set VGG network and decoder paths
     vgg_network = 'caffe/VGG_ILSVRC_19_layers'
-    src_decoder_dir = '../srcdecoder_dir'
-    trg_decoder_dir = '../trgdecoder_dir'
+    src_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    trg_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
 
     # Define the list of regions of interest (ROI)
     rois_list = {'VC': 'ROI_VC =1'}

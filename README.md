@@ -40,48 +40,61 @@ Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, Misato T
 
 ## Getting Started
 ### Build Environment
+To begin, set up the environment by following these steps:
 
-Step1: Navigate to the base directory and create the environment by running the following command.
+Step1: Navigate to the base directory and create the Conda environment:
   ```sh
   conda env create -f env.yaml
   ```
-Step2: Activate the environment.
+Step2: Activate the environment:
   ```sh
   conda activate NCC
   ```
 ### Download Data
 
-To utilize this project, you'll need to download the required data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578) and organize the dataset appropriately.
+To use this project, you'll need to download and organize the required data:
+- Download the brain data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578) and organize the data appropriately.
 
-You can navigate to the `data` directory and download the demo data with the following commands:
+Alternatively, you can use the following commands to download specific data directly:
  ```sh
 # To download the training fMRI data:
 python download.py fmri_training
 
 # Or to download the test fMRI data:
 python download.py fmri_test
+
+# download the DNN features of training images:
+python download.py stimulus_feature
  ```
 
-## Usage
-### Pre-train Decoders
+### Download Pre-trained Decoders
 
-To pre-train the decoders, use the following command:
+To use this project, you'll need to download the required pre-trained decoders (currently uploading to Figshare) with the following command:
 
 ```sh
-python feature-decoding/featdec_fastl2lir_train.py feature-decoding/config/deeprecon_pyfastl2lir_alpha100_vgg19_allunits.yaml
+python download.py decoders
 ```
+
+If you prefer to train the decoders yourself (approximately 2 days per subject), detailed instructions and scripts are available in the `feature-decoding` directory.
+## Usage
 
 ### Train Neural Code Converters
 
 #### Content Loss-based Training
 
-To train the neural code converters using content loss for subject pairs, execute:
+To train the neural code converters using content loss for subject pairs, run:
 
 ```sh
 python NCC_content_loss/NCC_train.py --cuda
 ```
 
-- **Note**: Use the `--cuda` flag when running on a GPU server. Omit `--cuda` if training on a CPU server.
+* **Note**: Use the `--cuda` flag when running on a GPU server. Omit `--cuda` if training on a CPU server.
+
+Training one subject pair usually takes about 15 hours due to the large computational requirements. You can also download the pre-trained converters from Figshare (currently uploading).
+
+```sh
+python download.py converters
+```
 
 #### Brain Loss-based Training
 
@@ -93,7 +106,7 @@ python NCC_brain_loss/NCC_train.py
 
 ### Test Neural Code Converters
 
-#### 1. DNN Feature Decoding
+#### DNN Feature Decoding
 
 To decode DNN features from converted brain activities, use the following commands:
 
@@ -109,12 +122,72 @@ To decode DNN features from converted brain activities, use the following comman
   python NCC_brain_loss/NCC_test.py
   ```
 
-#### 2. Image Reconstruction
+#### Image Reconstruction
 
 To reconstruct images from the decoded features:
 
 1. Navigate to the `reconstruction` directory.
 2. Follow the provided README for detailed instructions on setting up the environment and usage.
+
+### Quantitative evaluation
+The quantitative evaluation are presented in terms of conversion accuracy, decoding accuracy, and identification accuracy.
+#### Conversion accuracy
+To calculate raw correlations for conversion accuracy, navigate to the `conversion_accuracy` directory and run:
+
+- For content loss-based converters:
+
+  ```sh
+  # pattern correlation
+  python fmri_pattern_corr_content_loss.py
+  
+  # profile correlation
+  python fmri_profile_corr_content_loss.py
+  ```
+  
+- For brain loss-based converters:
+
+  ```sh
+  # pattern correlation
+  python fmri_pattern_corr_brain_loss.py
+  
+  # profile correlation
+  python fmri_profile_corr_brain_loss.py
+  ```
+
+To obtain the normalized correlations and plot the Figure 2E and 2F, use the following commands.
+```sh
+python plot_figure.py
+```
+
+#### Decoding accuracy
+To calculate decoding accuracy for decoded features, first download the ground truth features of the stimulus images using:
+```sh
+python download.py true_features
+```
+
+Then, navigate to the `decoding_accuracy` directory and run:
+```sh
+python featdec_eval.py
+```
+To plot the Figure 3B and 3C, use the following command.
+```sh
+python plot_figure.py
+```
+#### Identification accuracy
+To quantitatively evaluate the reconstructed images,first download the ground truth stimulus images:
+```sh
+python download.py source
+```
+
+Then, navigate to the `identification_accuracy` directory and use the following commands:
+```sh
+python recon_image_eval.py
+python recon_image_eval_dnn.py
+```
+To plot the Figure 3F, use the following command.
+```sh
+python plot_figure.py
+```
 
 ## Citation
 

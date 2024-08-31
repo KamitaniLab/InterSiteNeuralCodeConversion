@@ -122,7 +122,6 @@ def main():
 
 # Functions ##################################################################
 def train_NCconverter(x, y, x_labels, y_labels,
-                      # embedded_idxs_src, embedded_idxs_trg,
                       num_sample,
                       alpha=1.0,
                       output='./NCconverter_results.mat', save_chunk=False,
@@ -136,9 +135,7 @@ def train_NCconverter(x, y, x_labels, y_labels,
     else:
         raise ValueError('Unsupported feature array shape')
 
-    # Sample selection ------------------------------------------------------
-    # The dataset contains 6000 samples, here we choose the needed sample size.
-    # Sort the X and Y data, such that they are aligned and is easy to select the data.
+    # Sort samples ------------------------------------------------------
 
     x_index = np.argsort(x_labels.flatten())
     x_labels = x_labels[x_index]
@@ -147,44 +144,6 @@ def train_NCconverter(x, y, x_labels, y_labels,
     y_index = np.argsort(y_labels.flatten())
     y_labels = y_labels[y_index]
     y = y[y_index, :]
-
-    # If we only need a sample size smaller than 1200, we choose from the first repetition.
-    if num_sample < 1200:
-        rep = 1
-    else:
-        rep = int(num_sample / 1200)
-
-    # select the needed repetitions.
-    tmp = np.zeros(5, dtype=bool)
-    tmp[:rep] = True
-    sel = np.tile(tmp, 1200)
-    x_labels = x_labels[sel]
-    x = x[sel]
-    y_labels = y_labels[sel]
-    y = y[sel]
-
-    # If we only need a sample size smaller than 1200, samples belongs to different categories are chosen to avoid any bias.
-    # Here we have 150 image categories, 8 images per category
-    if num_sample == 300:
-        # 2 images per category
-        x = x[0::4]
-        y = y[0::4]
-        x_labels = x_labels[0::4]
-        y_labels = y_labels[0::4]
-
-    elif num_sample == 600:
-        # 4 images per category
-        x = np.vstack((x[0::4], x[1::4]))
-        y = np.vstack((y[0::4], y[1::4]))
-        x_labels = np.vstack((x_labels[0::4], x_labels[1::4]))
-        y_labels = np.vstack((y_labels[0::4], y_labels[1::4]))
-
-    elif num_sample == 900:
-        # 6 images per category
-        x = np.vstack((x[0::4], x[1::4], x[2::4]))
-        y = np.vstack((y[0::4], y[1::4], y[2::4]))
-        x_labels = np.vstack((x_labels[0::4], x_labels[1::4], x_labels[2::4]))
-        y_labels = np.vstack((y_labels[0::4], y_labels[1::4], y_labels[2::4]))
 
     # Preprocessing ----------------------------------------------------------
     print('Preprocessing')

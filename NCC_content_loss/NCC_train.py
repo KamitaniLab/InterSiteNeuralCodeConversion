@@ -30,38 +30,15 @@ parser.add_argument('--gpu_id', type=str, default='0', help='gpu id')
 # Set the global Tensor type
 Tensor = torch.FloatTensor
 
-def select_samples(x, x_labels, path_src, num_sample):
+def normalize_samples(x, x_labels, path_src):
     """
-    Select and normalize samples based on the number of required samples.
+    normalize samples.
     """
     # Sort the data based on labels
     x_index = np.argsort(x_labels.flatten())
     x_labels = x_labels[x_index]
     x = x[x_index, :]
-
-    # Determine the number of repetitions based on sample size
-    if num_sample < 1200:
-        rep = 1
-    else:
-        rep = int(num_sample / 1200)
-
-    tmp = np.zeros(5, dtype=bool)
-    tmp[:rep] = True
-    sel = np.tile(tmp, 1200)
-    x_labels = x_labels[sel]
-    x = x[sel]
-
-    # Handle different sample sizes to avoid bias in category representation
-    if num_sample == 300:
-        x = x[0::4]
-        x_labels = x_labels[0::4]
-    elif num_sample == 600:
-        x = np.vstack((x[0::4], x[1::4]))
-        x_labels = np.vstack((x_labels[0::4], x_labels[1::4]))
-    elif num_sample == 900:
-        x = np.vstack((x[0::4], x[1::4], x[2::4]))
-        x_labels = np.vstack((x_labels[0::4], x_labels[1::4], x_labels[2::4]))
-
+    
     # Normalize the samples
     src_mean_std_dir = path_src.build_model_path('fc6')
     x_mean_src, x_norm_src, _, _, _, _ = fastl2lir_parameter(src_mean_std_dir, chunk_axis=1)
@@ -200,7 +177,6 @@ def converter_training(subject_src, subject_trg, data_brain, rois_list, roi, vgg
     Train the converter model for a specific subject and ROI.
     """
     conversion = f"{subject_src}_2_{subject_trg}"
-    print(f"Conversion: {conversion}")
 
     x = data_brain[subject_src].select(rois_list[roi])
     x_labels = data_brain[subject_src].select('image_index')  # Source brain data
@@ -211,13 +187,11 @@ def converter_training(subject_src, subject_trg, data_brain, rois_list, roi, vgg
 
     # Load target brain activity dimensions instead of data
     x_mean_trg, _, _, _, _, _ = fastl2lir_parameter(path_trg.build_model_path('fc6'), chunk_axis=1)
-    print(x_mean_trg.shape)
     input_nc = x.shape[1]
     output_nc = x_mean_trg.shape[1]
 
     # Process brain activity: select and normalize samples
-    x, brain_labels = select_samples(x, x_labels, path_src, opt.number_size)
-    print(brain_labels.shape)
+    x, brain_labels = normalize_samples(x, x_labels, path_src)
 
     # Align labels of brain activity and DNN
     dnn_labels = np.unique(brain_labels)
@@ -301,8 +275,8 @@ def main():
     }
 
     # Define directories for decoders
-    src_decoder_dir = '../srcdecoder_dir'
-    trg_decoder_dir = '../trgdecoder_dir'
+    src_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    trg_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
 
     # DNN feature directory
     vgg_dir = ''
