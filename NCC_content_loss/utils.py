@@ -11,7 +11,7 @@ import os, hdf5storage
 
 class Logger():
     def __init__(self, n_iterations, batches_iteration):
-        self.viz = Visdom()
+        # self.viz = Visdom()
         self.n_iterations = n_iterations
         self.batches_iteration = batches_iteration
         self.iteration = 1
@@ -19,9 +19,7 @@ class Logger():
         self.prev_time = time.time()
         self.mean_period = 0
         self.losses = {}
-        self.loss_windows = {}
-        self.image_windows = {}
-
+        # self.loss_windows = {}
 
     def log(self, losses=None, images=None):
         self.mean_period += (time.time() - self.prev_time)
@@ -48,10 +46,10 @@ class Logger():
         if (self.batch % self.batches_iteration) == 0:
             # Plot losses
             for loss_name, loss in self.losses.items():
-                if loss_name not in self.loss_windows:
-                    self.loss_windows[loss_name] = self.viz.line(X=np.array([self.iteration]), Y=np.array([loss/self.batch]),opts={'xlabel': 'iterations', 'ylabel': loss_name, 'title': loss_name})
-                else:
-                    self.viz.line(X=np.array([self.iteration]), Y=np.array([loss/self.batch]), win=self.loss_windows[loss_name], update='append')
+                # if loss_name not in self.loss_windows:
+                #     self.loss_windows[loss_name] = self.viz.line(X=np.array([self.iteration]), Y=np.array([loss/self.batch]),opts={'xlabel': 'iterations', 'ylabel': loss_name, 'title': loss_name})
+                # else:
+                #     self.viz.line(X=np.array([self.iteration]), Y=np.array([loss/self.batch]), win=self.loss_windows[loss_name], update='append')
                 # Reset losses for next iteration
                 self.losses[loss_name] = 0.0
 
@@ -70,25 +68,6 @@ class LambdaLR():
 
     def step(self, iteration):
         return 1.0 - max(0, iteration + self.offset - self.decay_start_iteration)/(self.n_iterations - self.decay_start_iteration)
-
-def predict(X, W, b, y_mean, y_norm, ones):
-    '''Predict with the fitted model.
-
-    Parameters
-    ----------
-    X : tensor_like
-
-    Returns
-    -------
-    Y : tensor_like
-    '''
-    # y_mean.ndim should be 2
-
-    # Prediction
-    y_pred_tmp = torch.matmul(X, W) + torch.matmul(ones, b)
-    y_pred_tmp = y_pred_tmp * y_norm + y_mean
-
-    return y_pred_tmp
 
 def predict_normalized(X, W, b):
     '''Predict with the fitted linear model.
@@ -248,7 +227,7 @@ def dnn_chunk_get(chunk_dir, i):
 
     return dnn_tmp
 
-def test_fastl2lir_revise(model_store, src_mean_std_store, x, chunk_axis=1):
+def test_fastl2lir_revise(model_store, y_mean_std_store, x, chunk_axis=1):
     # W: shape = (n_voxels, shape_features)
     if os.path.isdir(os.path.join(model_store, 'W')):
         W_files = sorted(glob.glob(os.path.join(model_store, 'W', '*.mat')))
@@ -267,8 +246,8 @@ def test_fastl2lir_revise(model_store, src_mean_std_store, x, chunk_axis=1):
 
     x_mean = hdf5storage.loadmat(os.path.join(model_store, 'x_mean.mat'))['x_mean']  # shape = (1, n_voxels)
     x_norm = hdf5storage.loadmat(os.path.join(model_store, 'x_norm.mat'))['x_norm']  # shape = (1, n_voxels)
-    y_mean = hdf5storage.loadmat(os.path.join(src_mean_std_store, 'y_mean.mat'))['y_mean']  # shape = (1, shape_features)
-    y_norm = hdf5storage.loadmat(os.path.join(src_mean_std_store, 'y_norm.mat'))['y_norm']  # shape = (1, shape_features)
+    y_mean = hdf5storage.loadmat(os.path.join(y_mean_std_store, 'y_mean.mat'))['y_mean']  # shape = (1, shape_features)
+    y_norm = hdf5storage.loadmat(os.path.join(y_mean_std_store, 'y_norm.mat'))['y_norm']  # shape = (1, shape_features)
 
     x = (x - x_mean) / x_norm
 

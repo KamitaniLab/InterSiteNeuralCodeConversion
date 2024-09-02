@@ -39,8 +39,13 @@ Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, Misato T
 [license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 
 ## Getting Started
+### Installation
+To begin, clone the repository on your local machine, using git clone and pasting the url of this project:
+   ```sh
+   git clone https://github.com/KamitaniLab/InterSiteNeuralCodeConversion.git
+   ````
+   
 ### Build Environment
-To begin, set up the environment by following these steps:
 
 Step1: Navigate to the base directory and create the Conda environment:
   ```sh
@@ -53,7 +58,8 @@ Step2: Activate the environment:
 ### Download Data
 
 To use this project, you'll need to download and organize the required data:
-- Download the brain data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578) and organize the data appropriately.
+- Download the brain data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578).
+- Download the DNN features of stimuli from Figshare (currently uploading to Figshare)
 
 Alternatively, you can use the following commands to download specific data directly:
  ```sh
@@ -108,7 +114,7 @@ python NCC_brain_loss/NCC_train.py
 
 #### DNN Feature Decoding
 
-To decode DNN features from converted brain activities, use the following commands:
+To decode DNN features from converted brain activities (approximately 80 mins per subject pair), use the following commands:
 
 - For content loss-based converters:
 
@@ -129,9 +135,10 @@ To reconstruct images from the decoded features:
 1. Navigate to the `reconstruction` directory.
 2. Follow the provided README for detailed instructions on setting up the environment and usage.
 
-### Quantitative evaluation
-The quantitative evaluation are presented in terms of conversion accuracy, decoding accuracy, and identification accuracy.
-#### Conversion accuracy
+### Quantitative Evaluation
+The quantitative evaluations are presented in terms of conversion accuracy, decoding accuracy, and identification accuracy.
+
+#### Conversion Accuracy
 To calculate raw correlations for conversion accuracy, navigate to the `conversion_accuracy` directory and run:
 
 - For content loss-based converters:
@@ -159,7 +166,7 @@ To obtain the normalized correlations and plot the Figure 2E and 2F, use the fol
 python plot_figure.py
 ```
 
-#### Decoding accuracy
+#### Decoding Accuracy
 To calculate decoding accuracy for decoded features, first download the ground truth features of the stimulus images using:
 ```sh
 python download.py true_features
@@ -173,13 +180,10 @@ To plot the Figure 3B and 3C, use the following command.
 ```sh
 python plot_figure.py
 ```
-#### Identification accuracy
-To quantitatively evaluate the reconstructed images,first download the ground truth stimulus images:
-```sh
-python download.py source
-```
+#### Identification Accuracy
+To quantitatively evaluate the reconstructed images, request and download the ground truth stimulus images via this [link](https://forms.gle/ujvA34948Xg49jdn9)  due to licensing issues. Place the downloaded images within the following directory: `data/test_image/source`.
 
-Then, navigate to the `identification_accuracy` directory and use the following commands:
+Then, navigate to the `identification_accuracy` directory and run:
 ```sh
 python recon_image_eval.py
 python recon_image_eval_dnn.py

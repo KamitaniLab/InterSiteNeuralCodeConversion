@@ -190,7 +190,7 @@ def converter_training(subject_src, subject_trg, data_brain, rois_list, roi, vgg
     input_nc = x.shape[1]
     output_nc = x_mean_trg.shape[1]
 
-    # Process brain activity: select and normalize samples
+    # Process brain activity: normalize samples
     x, brain_labels = normalize_samples(x, x_labels, path_src)
 
     # Align labels of brain activity and DNN
@@ -221,7 +221,7 @@ def converter_training(subject_src, subject_trg, data_brain, rois_list, roi, vgg
         optimizer.step()
 
         # Log the progress
-        logger.log({f'Deeprecon_{conversion}_': total_loss})
+        logger.log({f'Deeprecon_{conversion}_{roi}': total_loss})
         # Update learning rates
         lr_scheduler.step()
         # Save the model checkpoint
@@ -279,7 +279,7 @@ def main():
     trg_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
 
     # DNN feature directory
-    vgg_dir = ''
+    vgg_dir = '../data/stimulus_feature/VGG_ILSVRC_19_layers'
 
     src_network = 'caffe/VGG_ILSVRC_19_layers'
     trg_network = 'caffe/VGG_ILSVRC_19_layers'

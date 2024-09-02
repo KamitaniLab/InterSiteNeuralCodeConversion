@@ -199,7 +199,7 @@ class DNNHandler:
 
 
 def run_evaluation(method, recon_base_dir, output_filename):
-    true_image_dir = '/home/nu/hbwang/data/ImageNetTest/source/'
+    true_image_dir = '../../data/test_image/source/'
     subjects_list = ['sub01', 'sub02', 'sub03', 'sub04', 'sub05']
     subject = ['target']
     roi = ['VC']

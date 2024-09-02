@@ -79,7 +79,7 @@ def recon_image_eval(
 
 
 def run_image_evaluation(method, recon_base_dir, output_filename):
-    true_image_dir = '/home/nu/hbwang/data/ImageNetTest/source/'
+    true_image_dir = '../../data/test_image/source/'
     subject = ['target']
     roi = ['VC']
     result_data = []
