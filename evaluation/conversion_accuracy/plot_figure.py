@@ -143,7 +143,7 @@ def run_analysis(df1_file, df2_file, nc_file, nc_thd_file, analysis_type, result
 def main():
     update_plot_params()
 
-    # Pattern analysis
+    # Pattern analysis (blue color for brain_loss, red color for content_loss)
     run_analysis(
         df1_file='./results/conversion_accuracy_pattern_brain_loss.csv',
         df2_file='./results/conversion_accuracy_pattern_content_loss.csv',
@@ -156,10 +156,10 @@ def main():
         output_filename='pattern.pdf'
     )
 
-    # Profile analysis
+    # Profile analysis (blue color for brain_loss, red color for content_loss)
     run_analysis(
         df1_file='./results/conversion_accuracy_profile_brain_loss.csv',
-        df2_file='./results_content/conversion_accuracy_profile_content_loss.csv',
+        df2_file='./results/conversion_accuracy_profile_content_loss.csv',
         nc_file='./results/profile_noise_ceiling_single_trial.csv',
         nc_thd_file='./results/profile_nc_threshold_single_trial.csv',
         analysis_type='profile',
