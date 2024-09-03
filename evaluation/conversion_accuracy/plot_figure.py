@@ -73,14 +73,14 @@ def sort_and_order_results(result, mean_result, roi_order):
 
     return result, mean_result
 
-def plot_results(result, mean_result, output_dir, output_filename, ylabel, result_label):
+def plot_results(result, mean_result, output_dir, output_filename, ylabel, result_label, palette):
     """Plot the results and save the plot as a PDF."""
     sns.set()
     sns.set_theme(context="talk", style='ticks', font_scale=1.1)
     fig = plt.figure(figsize=(5.5, 3))
 
     g = sns.stripplot(data=result, x="ROI", y=result_label, size=3, hue='Method',
-                      palette={"NCC": "grey", "Ours": "grey"}, dodge=True, jitter=False, alpha=0)
+                      palette=palette, dodge=True, jitter=False, alpha=0)
     g.set(ylim=[0, 1])
     plt.xticks(rotation=0)
     g.legend_.remove()
@@ -94,23 +94,31 @@ def plot_results(result, mean_result, output_dir, output_filename, ylabel, resul
 
     unique_rois = mean_result['ROI'].unique()
     for index, roi in enumerate(unique_rois):
-        ncc_value = mean_result[(mean_result['ROI'] == roi) & (mean_result['Method'] == 'NCC')][result_label].values[0]
-        ours_value = mean_result[(mean_result['ROI'] == roi) & (mean_result['Method'] == 'Ours')][result_label].values[0]
-        plt.hlines(y=ncc_value, xmin=index - 0.4, xmax=index, color='c')
-        plt.hlines(y=ours_value, xmin=index, xmax=index + 0.4, color='lightcoral')
+        method1_value = mean_result[(mean_result['ROI'] == roi) & (mean_result['Method'] == list(palette.keys())[0])][result_label].values[0]
+        method2_value = mean_result[(mean_result['ROI'] == roi) & (mean_result['Method'] == list(palette.keys())[1])][result_label].values[0]
+        plt.hlines(y=method1_value, xmin=index - 0.4, xmax=index, color='c')
+        plt.hlines(y=method2_value, xmin=index, xmax=index + 0.4, color='lightcoral')
 
     sns.despine()
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    plt.subplots_adjust(top=1.02, bottom=0.1, left=0.1, right=0.9)
+    # plt.subplots_adjust(top=1.02, bottom=0.1, left=0.1, right=0.9)
     plt.savefig(os.path.join(output_dir, output_filename), bbox_inches='tight')
+
 
 def run_analysis(df1_file, df2_file, nc_file, nc_thd_file, analysis_type, result_label, ylabel, output_dir, output_filename):
     """Run the analysis pipeline and generate plots."""
     # Load and concatenate data
     df = load_and_concatenate_data(df1_file, df2_file)
+
+    # Extract unique method names from df1 and df2
+    method1 = pd.read_csv(df1_file)['Method'].unique()[0]
+    method2 = pd.read_csv(df2_file)['Method'].unique()[0]
+
+    # Define the palette based on these method names
+    palette = {method1: "grey", method2: "grey"}
 
     # Load noise ceiling data and merge based on analysis type
     if analysis_type == 'pattern':
@@ -129,17 +137,18 @@ def run_analysis(df1_file, df2_file, nc_file, nc_thd_file, analysis_type, result
     result, mean_result = sort_and_order_results(result, mean_result, roi_order)
 
     # Plot and save results
-    plot_results(result, mean_result, output_dir, output_filename, ylabel, result_label)
+    plot_results(result, mean_result, output_dir, output_filename, ylabel, result_label, palette)
+
 
 def main():
     update_plot_params()
 
     # Pattern analysis
     run_analysis(
-        df1_file='./results/conversion_accuracy_pattern_content_loss.csv',
-        df2_file='./results/conversion_accuracy_pattern_brain_loss.csv',
-        nc_file='./resultspattern_noise_ceiling_single_trial.csv',
-        nc_thd_file='./resultspattern_nc_threshold_single_trial.csv',
+        df1_file='./results/conversion_accuracy_pattern_brain_loss.csv',
+        df2_file='./results/conversion_accuracy_pattern_content_loss.csv',
+        nc_file='./results/pattern_noise_ceiling_single_trial.csv',
+        nc_thd_file='./results/pattern_nc_threshold_single_trial.csv',
         analysis_type='pattern',
         result_label='pattern_mean',
         ylabel="Conversion accuracy\n(normalized pattern)",
@@ -149,10 +158,10 @@ def main():
 
     # Profile analysis
     run_analysis(
-        df1_file='./results/conversion_accuracy_profile_content_loss.csv',
-        df2_file='./results/conversion_accuracy_profile__brain_loss.csv',
-        nc_file='./resultsprofile_noise_ceiling_single_trial.csv',
-        nc_thd_file='./resultsprofile_nc_threshold_single_trial.csv',
+        df1_file='./results/conversion_accuracy_profile_brain_loss.csv',
+        df2_file='./results_content/conversion_accuracy_profile_content_loss.csv',
+        nc_file='./results/profile_noise_ceiling_single_trial.csv',
+        nc_thd_file='./results/profile_nc_threshold_single_trial.csv',
         analysis_type='profile',
         result_label='profile_mean',
         ylabel="Conversion accuracy\n(normalized profile)",

@@ -133,7 +133,8 @@ To decode DNN features from converted brain activities (approximately 80 mins pe
 To reconstruct images from the decoded features:
 
 1. Navigate to the `reconstruction` directory.
-2. Follow the provided README for detailed instructions on setting up the environment and usage.
+2. Follow the provided README and reconstruction demo for detailed instructions on setting up the environment and usage.
+3. Modify the directory of the decoded features in the script as needed to reconstruct images.
 
 ### Quantitative Evaluation
 The quantitative evaluations are presented in terms of conversion accuracy, decoding accuracy, and identification accuracy.
@@ -161,7 +162,7 @@ To calculate raw correlations for conversion accuracy, navigate to the `conversi
   python fmri_profile_corr_brain_loss.py
   ```
 
-To obtain the normalized correlations and plot the Figure 2E and 2F, use the following commands.
+To obtain the normalized correlations and plot the Figure 2E and 2F with the provided result, use the following commands.
 ```sh
 python plot_figure.py
 ```
@@ -176,19 +177,19 @@ Then, navigate to the `decoding_accuracy` directory and run:
 ```sh
 python featdec_eval.py
 ```
-To plot the Figure 3B and 3C, use the following command.
+To plot the Figure 3B and 3C with the provided result, use the following command.
 ```sh
 python plot_figure.py
 ```
 #### Identification Accuracy
-To quantitatively evaluate the reconstructed images, request and download the ground truth stimulus images via this [link](https://forms.gle/ujvA34948Xg49jdn9)  due to licensing issues. Place the downloaded images within the following directory: `data/test_image/source`.
+To quantitatively evaluate the reconstructed images, please request and download the ground truth stimulus images using this [link](https://forms.gle/ujvA34948Xg49jdn9) due to licensing restrictions. Organize the downloaded images in the following directory structure: `data/test_image/source`.
 
 Then, navigate to the `identification_accuracy` directory and run:
 ```sh
 python recon_image_eval.py
 python recon_image_eval_dnn.py
 ```
-To plot the Figure 3F, use the following command.
+To plot the Figure 3F with the provided result, use the following command.
 ```sh
 python plot_figure.py
 ```

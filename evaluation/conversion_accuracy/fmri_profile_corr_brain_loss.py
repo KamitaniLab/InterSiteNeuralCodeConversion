@@ -107,9 +107,9 @@ def conversion_accuracy_profile(df_param, data_brain, base_ROI, nc_models_dir_ro
         converted_x = test_ncconverter(nc_model_dir, x)
 
         y_roi_idxs = compute_roi_index(dat2, base_ROI, roi_dict)
-        for trg_roi, roi_str in roi_dict.items():
-            y_sub = y[:, y_roi_idxs[trg_roi]]
-            converted_x_sub = converted_x[:, y_roi_idxs[trg_roi]]
+        for trg_roi, roi_idxs in y_roi_idxs.items():
+            y_sub = y[:, roi_idxs]
+            converted_x_sub = converted_x[:, roi_idxs]
 
             for i in range(y_sub.shape[1]):
                 y_sub_vox = y_sub[:, i].reshape(rep, -1, order='F')
@@ -117,11 +117,10 @@ def conversion_accuracy_profile(df_param, data_brain, base_ROI, nc_models_dir_ro
                 corr = np.mean(np.corrcoef(y_sub_vox, converted_x_sub_vox)[rep:, :rep])
 
                 result_data.append({'Source': src, 'Target': trg, 'Number of samples': num_samples,
-                                    'Correlation': corr, 'Method': 'NCC', 'ROI': trg_roi,
-                                    'Vox_idx': y_roi_idxs[trg_roi][i], 'Target ROI': trg_roi})
+                                    'Correlation': corr, 'Method': 'brain_loss', 'ROI': trg_roi,
+                                    'Vox_idx': i, 'Target ROI': trg_roi})
 
     return result_data
-
 
 def save_results(result_data, output_dir, output_filename):
     """
@@ -147,7 +146,7 @@ def main():
                      'sub05': 'sub-05_NaturalImageTest.h5'}
     nc_models_dir_root = os.path.join('../../NCC_brain_loss/NCconverter_results', 'ncc_training')
     output_dir = './results'
-    output_filename = 'conversion_accuracy_profile_brain_loss'
+    output_filename = 'conversion_accuracy_profile_brain_loss.csv'
     base_ROI = 'ROI_VC'
     rep = 24
 

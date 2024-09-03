@@ -78,7 +78,7 @@ def recon_image_eval(
     return np.nanmean(r_pixelt), np.nanmean(ident)
 
 
-def run_image_evaluation(method, recon_base_dir, output_filename):
+def run_evaluation(method, recon_base_dir, output_filename):
     true_image_dir = '../../data/test_image/source/'
     subject = ['target']
     roi = ['VC']

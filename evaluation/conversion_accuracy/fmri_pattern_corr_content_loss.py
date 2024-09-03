@@ -119,7 +119,7 @@ def calculate_correlations(x_test_labels, y_test_labels, y_roi_idxs, y, converte
                 'Target': trg,
                 'Number of samples': num_samples,
                 'Correlation': corr_mean,
-                'Method': 'Ours',
+                'Method': 'content_loss',
                 'ROI': trg_roi,
                 'Image index': image_index
             })

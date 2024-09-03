@@ -130,7 +130,7 @@ def conversion_accuracy_pattern(df_param, data_brain, base_ROI, nc_models_dir_ro
                 print(corr_mean)
 
                 result_data.append({'Source': src, 'Target': trg, 'Number of samples': num_samples,
-                                    'Correlation': corr_mean, 'Method': 'NCC', 'ROI': trg_roi, 'Image index': image_index})
+                                    'Correlation': corr_mean, 'Method': 'brain_loss', 'ROI': trg_roi, 'Image index': image_index})
 
     return result_data
 

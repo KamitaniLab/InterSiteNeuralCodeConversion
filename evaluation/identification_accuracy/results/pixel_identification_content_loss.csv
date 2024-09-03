@@ -1,0 +1,21 @@
+Source,Target,Number of samples,Identification accuracy,Method,ROI
+sub01,sub02,6000,0.823673469387755,content_loss,VC
+sub01,sub03,6000,0.8253061224489795,content_loss,VC
+sub01,sub04,6000,0.8195918367346939,content_loss,VC
+sub01,sub05,6000,0.8008163265306122,content_loss,VC
+sub02,sub01,6000,0.810204081632653,content_loss,VC
+sub02,sub03,6000,0.8179591836734694,content_loss,VC
+sub02,sub04,6000,0.8146938775510203,content_loss,VC
+sub02,sub05,6000,0.7983673469387756,content_loss,VC
+sub03,sub01,6000,0.803673469387755,content_loss,VC
+sub03,sub02,6000,0.8191836734693878,content_loss,VC
+sub03,sub04,6000,0.8016326530612244,content_loss,VC
+sub03,sub05,6000,0.7906122448979592,content_loss,VC
+sub04,sub01,6000,0.773061224489796,content_loss,VC
+sub04,sub02,6000,0.7967346938775509,content_loss,VC
+sub04,sub03,6000,0.7742857142857144,content_loss,VC
+sub04,sub05,6000,0.7795918367346938,content_loss,VC
+sub05,sub01,6000,0.7567346938775509,content_loss,VC
+sub05,sub02,6000,0.7742857142857144,content_loss,VC
+sub05,sub03,6000,0.7277551020408163,content_loss,VC
+sub05,sub04,6000,0.6971428571428571,content_loss,VC

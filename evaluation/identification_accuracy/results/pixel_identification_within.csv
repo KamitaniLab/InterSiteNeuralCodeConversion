@@ -1,0 +1,6 @@
+Subject,Number of samples,Identification accuracy,Method,ROI
+sub01,6000,0.8085714285714286,within,VC
+sub02,6000,0.8028571428571428,within,VC
+sub03,6000,0.8375510204081631,within,VC
+sub04,6000,0.7967346938775509,within,VC
+sub05,6000,0.7783673469387754,within,VC

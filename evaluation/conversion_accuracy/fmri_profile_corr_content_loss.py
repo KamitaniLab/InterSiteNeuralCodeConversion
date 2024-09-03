@@ -108,7 +108,7 @@ def calculate_correlations(y, converted_x, y_roi_idxs, src, trg, result_data, re
                 'Target': trg,
                 'Number of samples': num_samples,
                 'Correlation': corr,
-                'Method': 'Ours',
+                'Method': 'content_loss',
                 'ROI': trg_roi,
                 'Vox_idx': i,
                 'Target ROI': trg_roi

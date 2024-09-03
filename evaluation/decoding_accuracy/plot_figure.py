@@ -168,7 +168,7 @@ def main():
     df1 = load_and_sort_data(
         './results/decoding_accuracy_within.csv')
     df2 = load_and_sort_data(
-        '/results/decoding_accuracy_brain_loss.csv')
+        './results/decoding_accuracy_brain_loss.csv')
     df3 = load_and_sort_data(
         './results/decoding_accuracy_content_loss.csv')
 
