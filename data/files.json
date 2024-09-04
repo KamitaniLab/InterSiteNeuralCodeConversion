@@ -68,6 +68,282 @@
              "name": "sub-05_ArtificialImageTest.h5",
              "url": "https://figshare.com/ndownloader/files/32719568"}
         ]
+    },
+    "stimulus_feature": {
+        "save_in": "./",
+        "files": [
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv1_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48996952",
+                "md5sum": "7ce7bdba54acf7746fde9cebc47d3602",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv1_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48997816",
+                "md5sum": "bde71afbcd33a54c7ee045560c436d40",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv2_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48996307",
+                "md5sum": "609ded740ad02cdd6b411b2aedfef962",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv2_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48996568",
+                "md5sum": "34b9b2fc8468a644ef0a6139db9b8eb8",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv3_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995260",
+                "md5sum": "be44fccb38f4aec75d45104e333699aa",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv3_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995383",
+                "md5sum": "c3539636044838a7bf65ae1ab3518e71",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv3_3.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995614",
+                "md5sum": "1bd12f9ab7152eea58102390df0883da",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv3_4.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995659",
+                "md5sum": "9dc9eacb180163d099c0a5ff8be1ff9e",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv4_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995797",
+                "md5sum": "5255c70cb900326a2fe4ad2c23f5c7ff",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv4_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995848",
+                "md5sum": "75b624061a0a42a623186e69cc72b538",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv4_3.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995887",
+                "md5sum": "fcf202fc56ca9913773912ca0f52d9a7",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv4_4.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995911",
+                "md5sum": "ec21ecd959dc2d29d2b5e61c305ab2a3",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv5_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48994978",
+                "md5sum": "2db165e6b2aed6d05cbe47116cd2ff1d",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv5_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995071",
+                "md5sum": "45a57c53631a7abcf5e881e1fabea442",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv5_3.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995164",
+                "md5sum": "bbc5b533b101d15327b788d89875ced6",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-conv5_4.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995206",
+                "md5sum": "914e710eb30e763ea5bd92d0ff9e4627",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-fc6.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995218",
+                "md5sum": "4052a10981e5e5ca7ef79f8d08d33e95",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-fc7.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995221",
+                "md5sum": "0701e8ba893b50bc918b66dab70ec898",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "stimulus_feature-VGG_ILSVRC_19_layers-fc8.zip",
+                "url":    "https://ndownloader.figshare.com/files/48995224",
+                "md5sum": "5226565c4efde6e1c54fd21e2861cc35",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            }
+        ]
+    },
+    "pre-trained-converters": {
+        "save_in": "./",
+        "files": [
+            {
+                "name":   "pre-trained-converters.zip",
+                "url":    "https://ndownloader.figshare.com/files/48969991",
+                "md5sum": "3a32821ffd3d083062728352188b3f6d",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            }
+        ]
+    },
+    "pre-trained-decoders": {
+        "save_in": "./",
+        "files": [
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv1_1.zip",
+                "url":    ["https://ndownloader.figshare.com/files/48992341", "https://ndownloader.figshare.com/files/48992479"],
+                "md5sum": ["fda480919800b1e60c9dca6213327b1f", "88d7862608ba327a91dde8c4e5d50e14"],
+                "postproc": [{"name": "merge"}, {"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv1_2.zip",
+                "url":    ["https://ndownloader.figshare.com/files/48985585", "https://ndownloader.figshare.com/files/48985993"],
+                "md5sum": ["041454ca452bebbe31dd83bd3bff5e7a", "c35449cbd14c84b1cadf0a788dc0c411"],
+                "postproc": [{"name": "merge"}, {"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv2_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48961249",
+                "md5sum": "100095b5993199e44537299c31cf7c7d",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv2_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48963853",
+                "md5sum": "63d82fcc6d6a7c0c33cdfcd91266360b",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv3_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48957658",
+                "md5sum": "a542eb17bb31a1efb4a0939a557cbf74",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv3_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48958615",
+                "md5sum": "5f07acad53adf1498a92c4a72c88d0b5",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv3_3.zip",
+                "url":    "https://ndownloader.figshare.com/files/48959299",
+                "md5sum": "a1b9ae34bc7aca81908d2751866afdbb",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv3_4.zip",
+                "url":    "https://ndownloader.figshare.com/files/48960073",
+                "md5sum": "bc0614f0c57700ececfbd16a381d25a1",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv4_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935218",
+                "md5sum": "afbc0ddda4fb85977e253a77cc466e86",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv4_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935257",
+                "md5sum": "f1d0a4a7fd1d323314b4de7560d0a674",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv4_3.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935317",
+                "md5sum": "8b922cd6b35b8f2568c96f918301f29f",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv4_4.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935659",
+                "md5sum": "36978879ba0238202d0a3058744877fa",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv5_1.zip",
+                "url":    "https://ndownloader.figshare.com/files/48936121",
+                "md5sum": "3b8d6c6bd305df34722d7b3590e62b9d",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv5_2.zip",
+                "url":    "https://ndownloader.figshare.com/files/48936253",
+                "md5sum": "00331347cb1d17b96333b10bdad952f7",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv5_3.zip",
+                "url":    "https://ndownloader.figshare.com/files/48936373",
+                "md5sum": "85f1037968a81cc9a48b69af5090894a",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-conv5_4.zip",
+                "url":    "https://ndownloader.figshare.com/files/48936496",
+                "md5sum": "1e2c50eb4ce67797dd1a45d281a34347",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-fc6.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935107",
+                "md5sum": "d18b7c1b56cd5840c13a4ebf8b3bb11e",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-fc7.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935194",
+                "md5sum": "a98fb7db31f9cdb109c9277123ffc570",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "pre-trained-decoders-ImageNetTraining-deeprecon_pyfastl2lir_alpha100_vgg19_allunits-caffe-VGG_ILSVRC_19_layers-fc8.zip",
+                "url":    "https://ndownloader.figshare.com/files/48935200",
+                "md5sum": "e023dc1b61c5da2e6dd03323fa4647cf",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            }
+        ]
+    },
+    "test_image-true_features": {
+        "save_in": "./",
+        "files": [
+            {
+                "name":   "test_image-true_features-VGG_ILSVRC_19_layers.zip",
+                "url":    "https://ndownloader.figshare.com/files/48972361",
+                "md5sum": "b8de5cac4a6409269424c898613c24a4",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            }
+        ]
+    },
+    "test_image-decoded_features": {
+        "save_in": "./",
+        "files": [
+            {
+                "name":   "test_image-decoded_features-brain_loss-sub01_2_sub02-caffe-VGG_ILSVRC_19_layers.zip",
+                "url":    "https://ndownloader.figshare.com/files/48983185",
+                "md5sum": "8f7e1ef8bcdb1f2b39db61e4d0da892a",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            },
+            {
+                "name":   "test_image-decoded_features-content_loss-sub01_2_sub02-caffe-VGG_ILSVRC_19_layers.zip",
+                "url":    "https://ndownloader.figshare.com/files/48983704",
+                "md5sum": "3817257875f1c18ab717c5ef85ec07e0",
+                "postproc": [{"name": "unzip", "destination": "./"}]
+            }
+        ]
     }
-
 }
