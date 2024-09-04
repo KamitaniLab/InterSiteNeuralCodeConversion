@@ -39,8 +39,7 @@ def main():
         'VC': 'ROI_VC = 1'
     }
 
-    # Image features
-    features_dir = '../../data/test_image/true_features/contents_shared/ImageNetTest/derivatives/features'
+    # Image feature list
     network = 'caffe/VGG_ILSVRC_19_layers'
     features_list = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2',
                      'conv3_1', 'conv3_2', 'conv3_3', 'conv3_4',

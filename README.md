@@ -59,10 +59,11 @@ Step2: Activate the environment:
 
 To use this project, you'll need to download and organize the required data:
 - Download the brain data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578).
-- Download the DNN features of stimuli from Figshare (currently uploading to Figshare)
+- Download the DNN features of stimuli from [Figshare](https://figshare.com/articles/dataset/Inter-individual_and_inter-site_neural_code_conversion/26860954)
 
 Alternatively, you can use the following commands to download specific data directly:
  ```sh
+# In "data" directory:
 # To download the training fMRI data:
 python download.py fmri_training
 
@@ -75,10 +76,10 @@ python download.py stimulus_feature
 
 ### Download Pre-trained Decoders
 
-To use this project, you'll need to download the required pre-trained decoders (currently uploading to Figshare) with the following command:
+To use this project, you'll need to download the required pre-trained decoders from [Figshare](https://figshare.com/articles/dataset/Inter-individual_and_inter-site_neural_code_conversion/26860954) with the following command:
 
 ```sh
-python download.py decoders
+python download.py pre-trained-decoders
 ```
 
 If you prefer to train the decoders yourself (approximately 2 days per subject), detailed instructions and scripts are available in the `feature-decoding` directory.
@@ -96,15 +97,15 @@ python NCC_content_loss/NCC_train.py --cuda
 
 * **Note**: Use the `--cuda` flag when running on a GPU server. Omit `--cuda` if training on a CPU server.
 
-Training one subject pair usually takes about 15 hours due to the large computational requirements. You can also download the pre-trained converters from Figshare (currently uploading).
+Training one subject pair usually takes about 15 hours due to the large computational requirements. You can also download the pre-trained converters from [Figshare](https://figshare.com/articles/dataset/Inter-individual_and_inter-site_neural_code_conversion/26860954) with the following command:
 
 ```sh
-python download.py converters
+python download.py pre-trained-converters
 ```
 
 #### Brain Loss-based Training
 
-To train the neural code converters using brain loss for subject pairs, execute:
+To train the neural code converters using brain loss for subject pairs, run:
 
 ```sh
 python NCC_brain_loss/NCC_train.py
@@ -162,7 +163,7 @@ To calculate raw correlations for conversion accuracy, navigate to the `conversi
   python fmri_profile_corr_brain_loss.py
   ```
 
-To obtain the normalized correlations and plot the Figure 2E and 2F with the provided result, use the following commands.
+To obtain the normalized correlations and plot the Figure 2E and 2F with the provided result, use the following command:
 ```sh
 python plot_figure.py
 ```
@@ -170,14 +171,14 @@ python plot_figure.py
 #### Decoding Accuracy
 To calculate decoding accuracy for decoded features, first download the ground truth features of the stimulus images using:
 ```sh
-python download.py true_features
+python download.py test_image-true_features
 ```
 
 Then, navigate to the `decoding_accuracy` directory and run:
 ```sh
 python featdec_eval.py
 ```
-To plot the Figure 3B and 3C with the provided result, use the following command.
+To plot the Figure 3B and 3C with the provided result, use the following command:
 ```sh
 python plot_figure.py
 ```
