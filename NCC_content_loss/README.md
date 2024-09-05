@@ -8,5 +8,5 @@ python NCC_train.py --cuda
 
 To test the neural code converters using content loss for subject pairs, execute:
 ```sh
-python NCC_test.py
+python NCC_test.py --cuda
 ```

@@ -111,7 +111,7 @@ def featdec_eval(
 
 def run_evaluation(method, decoded_feature_dir, output_filename):
     network = 'caffe/VGG_ILSVRC_19_layers'
-    test_feature_dir = '../../data/test_image/true_features/contents_shared/ImageNetTest/derivatives/features'
+    test_feature_dir = '../../data/test_image/true_features/VGG_ILSVRC_19_layers'
     output_dir = './results'
     features_list = [
         'conv1_1', 'conv1_2', 'conv2_1', 'conv2_2',
@@ -129,7 +129,7 @@ def run_evaluation(method, decoded_feature_dir, output_filename):
 
     featdec_eval(
         decoded_feature_dir,
-        os.path.join(test_feature_dir, network),
+        os.path.join(test_feature_dir),
         output_file=os.path.join(output_dir, output_filename),
         subjects=subject,
         subject_list=conversion_list,

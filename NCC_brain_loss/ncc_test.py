@@ -1,186 +1,100 @@
 '''Feature prediction with neural code conversion: prediction (test) script'''
-
-import glob
 import os
-from itertools import product
-from time import time
-
+import glob
 import numpy as np
-import scipy.io as sio
-import hdf5storage
-
-import bdpy
-from bdpy.util import makedir_ifnot, get_refdata
-from bdpy.distcomp import DistComp
-from bdpy.dataform import Features, load_array, save_array
-
-from fastl2lir import FastL2LiR
 import pandas as pd
-
+import hdf5storage
+import bdpy
+from time import time
+from bdpy.util import makedir_ifnot
+from bdpy.dataform import load_array, save_array
+from fastl2lir import FastL2LiR
 
 # Main #######################################################################
 
 def main():
-    # Read settings ----------------------------------------------------
+    # Read settings
     converter_param = './params/converter_params_VC.csv'
     df_param = pd.read_csv(converter_param)
     # Brain data
     brain_dir = '../data/fmri'
-    subjects_list = {'sub-01': 'sub-01_NaturalImageTest.h5',
-                     'sub-02': 'sub-02_NaturalImageTest.h5',
-                     'sub-03': 'sub-03_NaturalImageTest.h5',
-                     'sub-04': 'sub-04_NaturalImageTest.h5',
-                     'sub-05': 'sub-05_NaturalImageTest.h5'
+    subjects_list = {'sub01': 'sub-01_NaturalImageTest.h5',
+                     'sub02': 'sub-02_NaturalImageTest.h5',
+                     'sub03': 'sub-03_NaturalImageTest.h5',
+                     'sub04': 'sub-04_NaturalImageTest.h5',
+                     'sub05': 'sub-05_NaturalImageTest.h5'
                      }
 
     label_name = 'image_index'
-
-    rois_list = {
-        'VC': 'ROI_VC = 1'
-    }
-
-    # Image feature list
-    network = 'caffe/VGG_ILSVRC_19_layers'
-    features_list = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2',
-                     'conv3_1', 'conv3_2', 'conv3_3', 'conv3_4',
-                     'conv4_1', 'conv4_2', 'conv4_3', 'conv4_4',
-                     'conv5_1', 'conv5_2', 'conv5_3', 'conv5_4',
-                     'fc6', 'fc7', 'fc8'][::-1]
-
-    # results directory
-    results_dir_root = './feat_results'
+    rois_list = {'VC': 'ROI_VC =1'}
 
     # Converter models
-    nc_models_dir_root = os.path.join('./NCconverter_results', 'ncc_training')
+    nc_models_dir_root = os.path.join('./NCconverter_results', 'ncc_train')
 
-    # Misc settings
-    analysis_basename = os.path.splitext(os.path.basename(__file__))[0]
-
-    # Pretrained model: modify if models are placed in other directory.
-    pre_results_dir_root = '../pretrained_models'
-    pre_analysis_basename = 'featdec_deeprecon_500voxel_vgg19_allunits_fastl2lir_alpha100_predict'
-    pre_models_dir_root = os.path.join(pre_results_dir_root, pre_analysis_basename)
-
-    # if the target subject have different name, please change it here.
-    trg_model_name = '{}'
-
-    # Load data --------------------------------------------------------
-    print('----------------------------------------')
+    # Load data
     print('Loading data')
+    data_brain = {sbj: bdpy.BData(os.path.join(brain_dir, dat_file)) for sbj, dat_file in subjects_list.items()}
 
-    data_brain = {sbj: bdpy.BData(os.path.join(brain_dir, dat_file))
-                  for sbj, dat_file in subjects_list.items()}
-    data_features = Features(os.path.join(features_dir, network))
-
-    # Initialize directories -------------------------------------------
-    makedir_ifnot(results_dir_root)
+    # Initialize directories
     makedir_ifnot('tmp')
 
-    # Analysis loop ----------------------------------------------------
-    print('----------------------------------------')
-    print('Analysis loop')
+    # Analysis loop
+    print('Starting analysis loop')
 
-    for index, row in df_param.iterrows():
-        src = str(row['Source'])
-        trg = str(row['Target'])
-        roi = str(row['ROI'])
-        method = str(row['Method'])
-        alpha = int(row['Alpha'])
-        num_samples = int(row['Number of samples'])
-        print('--------------------')
-        print('Source: %s' % src)
-        print('Target: %s' % trg)
-        print('ROI: %s' % roi)
-        print('alpha: %s' % alpha)
-        print('Number of samples: %s' % num_samples)
-        print('Method: %s' % method)
+    for _, row in df_param.iterrows():
+        src, trg, roi = row['Source'], row['Target'], row['ROI']
+        method, alpha, num_samples = row['Method'], int(row['Alpha']), int(row['Number of samples'])
+
+        print(f'Source: {src}, Target: {trg}, ROI: {roi}, Alpha: {alpha}, Number of samples: {num_samples}, Method: {method}')
+
+        # Brain data
+        x = data_brain[src].select(rois_list[roi])
+        x_labels = data_brain[src].select(label_name)
+        y = data_brain[trg].select(rois_list[roi])
+        conversion = f'{src}_2_{trg}'
+
+        # Prepare data
+        print('Preparing data')
+        start_time = time()
+
+        x_test_labels_unique = np.unique(x_labels)
+        x_test_averaged = np.vstack([np.mean(x[(x_labels == lb).flatten(), :], axis=0) for lb in x_test_labels_unique])
+
+        print(f'Total elapsed time (data preparation): {time() - start_time:.2f} s')
+
+        # Convert x_test_averaged
+        nc_models_dir = os.path.join(nc_models_dir_root, conversion, roi, method, str(num_samples), 'model')
+        x_test_averaged_pred = test_ncconverter(nc_models_dir, x_test_averaged)
+
+        # Prediction
+        network = 'caffe/VGG_ILSVRC_19_layers'
+        decoders_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+        features_list = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2',
+                         'conv3_1', 'conv3_2', 'conv3_3', 'conv3_4',
+                         'conv4_1', 'conv4_2', 'conv4_3', 'conv4_4',
+                         'conv5_1', 'conv5_2', 'conv5_3', 'conv5_4',
+                         'fc6', 'fc7', 'fc8'][::-1]
 
         for feat in features_list:
-            print('----------------------------------------')
-            print('Layer: %s' % feat)
-
-            # Distributed computation setup
-            # -----------------------------
-            conversion = src + '2' + trg
-            analysis_id = analysis_basename + '-' + conversion + '-' + roi + '-' + method + '-' + str(
-                num_samples) + '-' + str(alpha) + '-' + feat
-            results_dir_prediction = os.path.join(results_dir_root, analysis_basename, 'decoded_features', network,
-                                                  feat, conversion, roi, method,
-                                                  str(num_samples), str(alpha))
-
-            if os.path.exists(results_dir_prediction):
-                print('%s is already done. Skipped.' % analysis_id)
-                continue
-
-            dist = DistComp(lockdir='tmp', comp_id=analysis_id)
-            if dist.islocked_lock():
-                print('%s is already running. Skipped.' % analysis_id)
-                continue
-
-            # Preparing data
-            # --------------
-            print('Preparing data')
-
+            print(f'Predicting for layer: {feat}')
             start_time = time()
+            pred_dnn = test_fastl2lir_div(os.path.join(decoders_dir, network, feat, trg, roi, 'model'), x_test_averaged_pred)
+            print(f'Total elapsed time (prediction): {time() - start_time:.2f} s')
 
-            # Brain data
-            x = data_brain[src].select(rois_list[roi])  # Brain data
-            x_labels = data_brain[src].select(label_name)  # Image labels in the brain data
-
-            # Averaging brain data
-            x_test_labels_unique = np.unique(x_labels)
-            x_test_averaged = np.vstack(
-                [np.mean(x[(x_labels == lb).flatten(), :], axis=0) for lb in x_test_labels_unique])
-
-            print('Total elapsed time (data preparation): %f' % (time() - start_time))
-
-            # Convert x_test_averaged
-            nc_models_dir = os.path.join(nc_models_dir_root, conversion, roi, method,
-                                         str(num_samples), str(alpha), 'model')
-            x_test_averaged = test_ncconverter(nc_models_dir, x_test_averaged)
-
-            # Prediction
-            # ----------
-            print('Prediction')
-
-            start_time = time()
-            y_pred = test_fastl2lir_div(
-                os.path.join(pre_models_dir_root, network, feat, trg_model_name.format(trg), roi, 'model'),
-                x_test_averaged)
-            print('Total elapsed time (prediction): %f' % (time() - start_time))
-
-            # Save results
-            # ------------
-            print('Saving results')
-
+            # Save predicted features
+            results_dir_prediction = os.path.join('./result_vgg', conversion, network, feat, 'target', roi)
             makedir_ifnot(results_dir_prediction)
 
-            start_time = time()
-
-            # Predicted features
-            for i, lb in enumerate(x_test_labels_unique):
-                # Predicted features
-                feat = np.array([y_pred[i,]])  # To make feat shape 1 x M x N x ...
-
-                # Save file name
-                save_file = os.path.join(results_dir_prediction, 'Img%04d.mat' % i)
-
-                # Save
-                save_array(save_file, feat, 'feat', dtype=np.float32, sparse=False)
-
-            print('Saved %s' % results_dir_prediction)
-            print('Elapsed time (saving results): %f' % (time() - start_time))
-
-            dist.unlock()
-
-        print('%s finished.' % analysis_basename)
-
+            for i, label in enumerate(x_test_labels_unique):
+                save_file = os.path.join(results_dir_prediction, f'{label}.mat')
+                save_array(save_file, np.array([pred_dnn[i]]), 'feat', dtype=np.float32)
+            print(f'Saved {results_dir_prediction}')
 
 # Functions ##################################################################
 def test_ncconverter(model_store, x):
     # Load NC converter
     print('Load NC converter')
-    NCconverter = hdf5storage.loadmat(os.path.join(model_store, 'transformation.mat'))
+    NCconverter = hdf5storage.loadmat(os.path.join(model_store, 'NCconverter.mat'))
     M = NCconverter['M']
 
     x_mean = hdf5storage.loadmat(os.path.join(model_store, 'x_mean.mat'))['x_mean']  # shape = (1, n_voxels)
@@ -197,7 +111,6 @@ def test_ncconverter(model_store, x):
     converted_x = converted_x * y_norm + y_mean
 
     return converted_x
-
 
 def test_fastl2lir_div(model_store, x, chunk_axis=1):
     # W: shape = (n_voxels, shape_features)
@@ -254,3 +167,5 @@ if __name__ == '__main__':
     # To avoid any use of global variables,
     # do nothing except calling main() here
     main()
+
+'''Feature prediction with neural code conversion: prediction (test) script'''

@@ -61,7 +61,7 @@ To use this project, you'll need to download and organize the required data:
 - Download the brain data from [Figshare](https://figshare.com/articles/dataset/Inter-individual_deep_image_reconstruction/17985578).
 - Download the DNN features of stimuli from [Figshare](https://figshare.com/articles/dataset/Inter-individual_and_inter-site_neural_code_conversion/26860954)
 
-Alternatively, you can use the following commands to download specific data directly:
+Alternatively, you can use the following commands to download specific data (The data will be automatically extracted and organized into the designated directory):
  ```sh
 # In "data" directory:
 # To download the training fMRI data:
@@ -120,7 +120,7 @@ To decode DNN features from converted brain activities (approximately 80 mins pe
 - For content loss-based converters:
 
   ```sh
-  python NCC_content_loss/NCC_test.py
+  python NCC_content_loss/NCC_test.py --cuda
   ```
 
 - For brain loss-based converters:
