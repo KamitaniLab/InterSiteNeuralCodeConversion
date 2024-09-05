@@ -40,15 +40,7 @@ def main():
 
     label_name = 'image_index'
 
-    rois_list = {
-                 'VC': 'ROI_VC =1',
-                  # 'V1': 'ROI_V1 = 1',
-                  # 'V2': 'ROI_V2 = 1',
-                  # 'V3': 'ROI_V3 = 1',
-                  # 'V4': 'ROI_hV4 = 1',
-                  # 'HVC': 'ROI_HVC = 1'
-
-    }
+    rois_list = {'VC': 'ROI_VC =1'}
 
     # Results directory
     results_dir_root = './NCconverter_results'

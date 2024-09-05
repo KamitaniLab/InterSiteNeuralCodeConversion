@@ -81,7 +81,7 @@ def convert_brain_activity(subject_src, subject_trg, roi, data_brain, rois_list,
         netG_A2B.cuda()
 
     # Load the pretrained model's weights
-    converter_dir = os.path.join('/home/nu/hbwang/projects/journal_update/default/VGG_optimization_mse_random_chunk/output', conversion)
+    converter_dir = os.path.join('../data/pre-trained/converters', conversion)
     device = torch.device('cuda:0')
     netG_A2B.load_state_dict(torch.load(os.path.join(converter_dir, roi, 'model.pth'), map_location=device))
     netG_A2B.eval()
