@@ -265,14 +265,8 @@ def main():
 
     data_brain = {subject: bdpy.BData(os.path.join(brain_dir, dat_file))
                   for subject, dat_file in subjects_list.items()}
-    rois_list = {
-        'VC': 'ROI_VC =1',
-        # 'V1': 'ROI_V1 = 1',
-        # 'V2': 'ROI_V2 = 1',
-        # 'V3': 'ROI_V3 = 1',
-        # 'V4': 'ROI_hV4 = 1',
-        # 'HVC': 'ROI_HVC = 1'
-    }
+
+    rois_list = {'VC': 'ROI_VC =1'}
 
     # Define directories for decoders
     src_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'

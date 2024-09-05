@@ -135,7 +135,12 @@ def main():
     # Set the brain data path and subjects list
     brain_dir = '../data/fmri'
     subjects_list = {'sub01': 'sub-01_NaturalImageTest.h5',
-                     'sub02': 'sub-02_NaturalImageTest.h5'}
+                     'sub02': 'sub-02_NaturalImageTest.h5',
+                     # 'sub03': 'sub-03_NaturalImageTest.h5',
+                     # 'sub04': 'sub-04_NaturalImageTest.h5',
+                     # 'sub05': 'sub-05_NaturalImageTest.h5'
+                     }
+    
     data_brain = load_data(brain_dir, subjects_list)
 
     # Set VGG network and decoder paths
