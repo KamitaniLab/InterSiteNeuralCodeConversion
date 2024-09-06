@@ -216,7 +216,7 @@ def dnn_chunk_get(chunk_dir, i):
     elif os.path.isfile(os.path.join(chunk_dir, 'chunk.mat')):
         dnn_chunks = [os.path.join(chunk_dir, 'chunk.mat')]
     else:
-        raise RuntimeError('W not found.')
+        raise RuntimeError('chunk not found.')
 
     # Check if i is valid
     if i >= len(dnn_chunks) :

@@ -58,9 +58,10 @@ def process_subject_pair(src, trg, data_brain, roi_dict, result_data, base_ROI, 
     print(f'Source: {src}, Target: {trg}')
 
     # Initialize and load the conversion model
-    model_path = os.path.join(
-        '../../NCC_content_loss/converters', conversion, 'VC',
-        'model.pth')
+    # Initialize and load the conversion model
+    # If you use the model trained from scratch by yourself, the directory should be 
+    # model_path = os.path.join('../../NCC_content_loss/output', conversion, 'VC', 'model.pth')
+    model_path = os.path.join('../../data/pre-trained/converters', conversion, 'VC', 'model.pth')
     netG_A2B = initialize_model(input_nc, output_nc, model_path)
 
     # Extract test labels and unique labels
@@ -132,7 +133,7 @@ def main():
     # Constants and paths
     brain_dir = '../../data/fmri'
     vgg_network = 'caffe/VGG_ILSVRC_19_layers'
-    pre_vgg_models_dir_root = '../../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    pre_vgg_models_dir_root = '../../data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
     output_dir = './results'
     output_filename = 'conversion_accuracy_profile_content_loss.csv'
     base_ROI = 'ROI_VC'

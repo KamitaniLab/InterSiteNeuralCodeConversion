@@ -258,9 +258,9 @@ def main():
     subjects_list = {
         'sub01': 'sub-01_NaturalImageTraining.h5',
         'sub02': 'sub-02_NaturalImageTraining.h5',
-        # 'sub03': 'sub-03_NaturalImageTraining.h5',
-        # 'sub04': 'sub-04_NaturalImageTraining.h5',
-        # 'sub05': 'sub-05_NaturalImageTraining.h5'
+        'sub03': 'sub-03_NaturalImageTraining.h5',
+        'sub04': 'sub-04_NaturalImageTraining.h5',
+        'sub05': 'sub-05_NaturalImageTraining.h5'
     }
 
     data_brain = {subject: bdpy.BData(os.path.join(brain_dir, dat_file))
@@ -269,8 +269,8 @@ def main():
     rois_list = {'VC': 'ROI_VC =1'}
 
     # Define directories for decoders
-    src_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
-    trg_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    src_decoder_dir = '../data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    trg_decoder_dir = '../data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
 
     # DNN feature directory
     vgg_dir = '../data/stimulus_feature/VGG_ILSVRC_19_layers'

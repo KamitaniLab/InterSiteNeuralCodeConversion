@@ -157,7 +157,7 @@ def main():
                      'sub03': 'sub-03_NaturalImageTest.h5',
                      'sub04': 'sub-04_NaturalImageTest.h5',
                      'sub05': 'sub-05_NaturalImageTest.h5'}
-    nc_models_dir_root = os.path.join('../../NCC_brain_loss/NCconverter_results', 'ncc_training')
+    nc_models_dir_root = os.path.join('../../NCC_brain_loss/NCconverter_results', 'ncc_train')
     output_dir = './results'
     output_filename = 'conversion_accuracy_pattern_brain_loss.csv'
     base_ROI = 'ROI_VC'

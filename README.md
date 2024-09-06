@@ -89,10 +89,10 @@ If you prefer to train the decoders yourself (approximately 2 days per subject),
 
 #### Content Loss-based Training
 
-To train the neural code converters using content loss for subject pairs, run:
+To train the neural code converters using content loss for subject pairs, navigate to the `NCC_content_loss` directory and run:
 
 ```sh
-python NCC_content_loss/NCC_train.py --cuda
+python NCC_train.py --cuda
 ```
 
 * **Note**: Use the `--cuda` flag when running on a GPU server. Omit `--cuda` if training on a CPU server.
@@ -105,28 +105,28 @@ python download.py pre-trained-converters
 
 #### Brain Loss-based Training
 
-To train the neural code converters using brain loss for subject pairs, run:
+To train the neural code converters using brain loss for subject pairs, navigate to the `NCC_brain_loss` directory and run:
 
 ```sh
-python NCC_brain_loss/NCC_train.py
+python ncc_train.py
 ```
 
 ### Test Neural Code Converters
 
 #### DNN Feature Decoding
 
-To decode DNN features from converted brain activities (approximately 80 mins per subject pair), use the following commands:
+To decode DNN features from converted brain activities (approximately 80 mins per subject pair), use the following commands in the corresponding directory:
 
 - For content loss-based converters:
-
+  
   ```sh
-  python NCC_content_loss/NCC_test.py --cuda
+  python NCC_test.py --cuda
   ```
 
 - For brain loss-based converters:
 
   ```sh
-  python NCC_brain_loss/NCC_test.py
+  python ncc_test.py
   ```
 
 #### Image Reconstruction
@@ -169,7 +169,7 @@ python plot_figure.py
 ```
 
 #### Decoding Accuracy
-To calculate decoding accuracy for decoded features, first download the ground truth features of the stimulus images using:
+To calculate decoding accuracy for decoded features, first download the ground truth features of the stimulus images in the `data` directory using:
 ```sh
 python download.py test_image-true_features
 ```

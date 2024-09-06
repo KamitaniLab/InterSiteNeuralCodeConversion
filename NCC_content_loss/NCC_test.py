@@ -81,6 +81,8 @@ def convert_brain_activity(subject_src, subject_trg, roi, data_brain, rois_list,
         netG_A2B.cuda()
 
     # Load the pretrained model's weights
+    # If you use the model trained from scratch by yourself, the directory should be 
+    # converter_dir = os.path.join('output', conversion)
     converter_dir = os.path.join('../data/pre-trained/converters', conversion)
     device = torch.device('cuda:0')
     netG_A2B.load_state_dict(torch.load(os.path.join(converter_dir, roi, 'model.pth'), map_location=device))
@@ -136,18 +138,18 @@ def main():
     brain_dir = '../data/fmri'
     subjects_list = {'sub01': 'sub-01_NaturalImageTest.h5',
                      'sub02': 'sub-02_NaturalImageTest.h5',
-                     # 'sub03': 'sub-03_NaturalImageTest.h5',
-                     # 'sub04': 'sub-04_NaturalImageTest.h5',
-                     # 'sub05': 'sub-05_NaturalImageTest.h5'
+                     'sub03': 'sub-03_NaturalImageTest.h5',
+                     'sub04': 'sub-04_NaturalImageTest.h5',
+                     'sub05': 'sub-05_NaturalImageTest.h5'
                      }
     
     data_brain = load_data(brain_dir, subjects_list)
 
     # Set VGG network and decoder paths
     vgg_network = 'caffe/VGG_ILSVRC_19_layers'
-    src_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
-    trg_decoder_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
-
+    src_decoder_dir = '../data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    trg_decoder_dir = '../data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+    
     # Define the list of regions of interest (ROI)
     rois_list = {'VC': 'ROI_VC =1'}
 
