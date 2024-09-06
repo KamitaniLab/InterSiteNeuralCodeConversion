@@ -68,7 +68,7 @@ def main():
 
         # Prediction
         network = 'caffe/VGG_ILSVRC_19_layers'
-        decoders_dir = '../data/feature_decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
+        decoders_dir = '../data/pre-trained/decoders/ImageNetTraining/deeprecon_pyfastl2lir_alpha100_vgg19_allunits'
         features_list = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2',
                          'conv3_1', 'conv3_2', 'conv3_3', 'conv3_4',
                          'conv4_1', 'conv4_2', 'conv4_3', 'conv4_4',
