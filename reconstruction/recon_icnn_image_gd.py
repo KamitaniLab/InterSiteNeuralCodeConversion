@@ -211,7 +211,11 @@ def recon_icnn_image_gd(
                 # Load bias
                 feat_mean0_train = {}
                 for layer in encoder_layers:
-                    fn = os.path.join(features_decoders_dir, layer, subject, roi, "model/y_mean.mat")
+                    if subject.startswith('sub-'):
+                        modified_name = subject.replace('sub-', 'sub')
+                    else:
+                        modified_name = subject
+                    fn = os.path.join(features_decoders_dir, layer, modified_name, roi, "model/y_mean.mat")
                     feat_mean0_train[layer] = hdf5storage.loadmat(fn)["y_mean"]
             else:
                 feat = {
