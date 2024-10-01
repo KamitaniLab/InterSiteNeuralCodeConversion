@@ -6,11 +6,10 @@ defaults:
 
 decoded_features:
   name: ImageNetTest_deeprecon_VGG19
-  path: ./data/decoded_features/ImageNetTest/deeprecon_originals/VGG19
+  path: ./data/decoded_features/within/caffe/VGG_ILSVRC_19_layers/
   subjects:
-    - sub-01
-    # - sub-02
-    # - sub-03
+    - sub01
+
   rois:
     - VC
   decoders:
@@ -21,6 +20,7 @@ icnn:
   feature_scaling: feature_std_train_mean_center
 
 output:
-  path: ./data/reconstruction/icnn/${_analysis_name_}_${encoder.name}_${generator.name}_scaling_${icnn.feature_scaling}_${icnn.num_iteration}iter/decoded/${decoded_features.name}
+  path: ./data/reconstruction/icnn/within/
   prefix: recon_image-
   ext: tiff
+

@@ -3,6 +3,7 @@
 
 from typing import Dict, List, Optional, Union
 
+from functools import partial
 from glob import glob
 from itertools import product
 from pathlib import Path
@@ -24,9 +25,41 @@ import torch
 import torch.optim as optim
 
 
+# Custom loss function #######################################################
+
+def dist_loss(
+        x: torch.Tensor, y: torch.Tensor,
+        layer: str,
+        weight=1,
+        alpha={}, beta={},
+        c1=1e-6, c2=1e-6
+) -> torch.Tensor:
+    if 'fc' in layer:
+        x_mean = x.mean()
+        y_mean = y.mean()
+        x_var = ((x - x_mean) ** 2).mean()
+        y_var = ((y - y_mean) ** 2).mean()
+        xy_cov = (x * y).mean() - x_mean * y_mean
+    else:
+        x_mean = x.mean([2, 3], keepdim=True)
+        y_mean = y.mean([2, 3], keepdim=True)
+        x_var = ((x - x_mean) ** 2).mean([2, 3], keepdim=True)
+        y_var = ((y - y_mean) ** 2).mean([2, 3], keepdim=True)
+        xy_cov = (x * y).mean([2, 3], keepdim=True) - x_mean * y_mean
+
+    s1 = (2 * x_mean * y_mean + c1) / (x_mean**2 + y_mean**2 + c1)
+    dist1 = s1.mean() * alpha[layer]
+
+    s2 = (2 * xy_cov + c2) / (x_var + y_var + c2)
+    dist2 = s2.mean() * beta[layer]
+
+    dist = (dist1 + dist2) * weight
+    return -dist
+
+
 # Main function ##############################################################
 
-def recon_icnn_image_gd(
+def recon_icnn_image_gd_dist(
         features_dir: Union[str, Path],
         output_dir: Union[str, Path],
         encoder_cfg: DictConfig,
@@ -82,11 +115,59 @@ def recon_icnn_image_gd(
     # Axis for channel in the DNN feature array
     channel_axis = 0
 
+    # DIST loss settings -----------------------------------------------------
+    dists_weight = 343639
+    dists_alpha = {
+        'fc8':     0.06661523244761258,
+        'fc7':     0.03871265134313895,
+        'fc6':     0.000629031742843134,
+        'conv5_4': 0.5310432634795051,
+        'conv5_3': 0.01975314483213067,
+        'conv5_2': 0.714010791024532,
+        'conv5_1': 0.08536182104218124,
+        'conv4_4': 0.030798346318926202,
+        'conv4_3': 0.004025735147052829,
+        'conv4_2': 0.0021716504774059618,
+        'conv4_1': 0.02880295296139471,
+        'conv3_4': 0.014169279688225732,
+        'conv3_3': 0.00019573287900056505,
+        'conv3_2': 0.0004887923569668929,
+        'conv3_1': 0.006857140440209977,
+        'conv2_2': 0.08084213863904581,
+        'conv2_1': 0.00024056214287883663,
+        'conv1_2': 0.003886371646003732,
+        'conv1_1': 0.009952859626673973,
+    }
+    dists_beta = {
+        'fc8': 0.008304840607742099,
+        'fc7': 0.044481711593671994,
+        'fc6': 0.038457933646483915,
+        'conv5_4': 0.0012780195483159135,
+        'conv5_3': 0.0018775814111698145,
+        'conv5_2': 0.5074163077203029,
+        'conv5_1': 0.002337825161420017,
+        'conv4_4': 0.7100372437615771,
+        'conv4_3': 0.5166895849277143,
+        'conv4_2': 0.03998274022264576,
+        'conv4_1': 0.04328555659354602,
+        'conv3_4': 0.024733951474856346,
+        'conv3_3': 0.0004859871528150426,
+        'conv3_2': 0.039778524165843814,
+        'conv3_1': 0.0002639605292406699,
+        'conv2_2': 0.02472305546171304,
+        'conv2_1': 0.12888847991806807,
+        'conv1_2': 0.008627502425502372,
+        'conv1_1': 0.000865427897168344
+    }
+
     # Reconstruction options -------------------------------------------------
 
     opts = {
         # Loss function
         "loss_func": torch.nn.MSELoss(reduction="sum"),
+
+        # Additional loss function
+        "custom_layer_loss_func": partial(dist_loss, weight=dists_weight, alpha=dists_alpha, beta=dists_beta),
 
         # The total number of iterations for gradient descend
         "n_iter": n_iter,
@@ -336,7 +417,7 @@ if __name__ == "__main__":
         features_decoders_dir = None
         subjects, rois = [None], [None]
 
-    recon_icnn_image_gd(
+    recon_icnn_image_gd_dist(
         features_dir=features_dir,
         features_decoders_dir=features_decoders_dir,
         output_dir=to_absolute_path(cfg.output.path),
