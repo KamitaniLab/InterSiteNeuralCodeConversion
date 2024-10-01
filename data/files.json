@@ -328,22 +328,5 @@
                 "postproc": [{"name": "unzip", "destination": "./"}]
             }
         ]
-    },
-    "test_image-decoded_features": {
-        "save_in": "./",
-        "files": [
-            {
-                "name":   "test_image-decoded_features-brain_loss-sub01_2_sub02-caffe-VGG_ILSVRC_19_layers.zip",
-                "url":    "https://ndownloader.figshare.com/files/48983185",
-                "md5sum": "8f7e1ef8bcdb1f2b39db61e4d0da892a",
-                "postproc": [{"name": "unzip", "destination": "./"}]
-            },
-            {
-                "name":   "test_image-decoded_features-content_loss-sub01_2_sub02-caffe-VGG_ILSVRC_19_layers.zip",
-                "url":    "https://ndownloader.figshare.com/files/48983704",
-                "md5sum": "3817257875f1c18ab717c5ef85ec07e0",
-                "postproc": [{"name": "unzip", "destination": "./"}]
-            }
-        ]
     }
 }
