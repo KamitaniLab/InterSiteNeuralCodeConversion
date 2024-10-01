@@ -63,5 +63,16 @@
                 "postproc": [{"name": "unzip", "destination": "./models"}]
             }
         ]
+    },
+    "decoded_features": {
+        "save_in": "./",
+        "files": [
+            {
+                "name":   "decoded_features.zip",
+                "url":    "https://ndownloader.figshare.com/files/49502619",
+                "md5sum": "06322c99eb01d56b79ce4b745eed70d6",
+                "postproc": [{"name": "unzip"}]
+            }
+        ]
     }
 }
