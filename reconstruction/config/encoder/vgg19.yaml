@@ -4,7 +4,7 @@ name: vgg19
 parameters_file: ./data/models/VGG_ILSVRC_19_layers/VGG_ILSVRC_19_layers.pt
 input_image_shape: [224, 224, 3]
 image_mean_file:  ./data/models/VGG_ILSVRC_19_layers/ilsvrc_2012_mean.npy
-feature_std_file: ./data/models/VGG_ILSVRC_19_layers/estimated_feat_std/estimated_cnn_feat_std_VGG_ILSVRC_19_layers_ImgSize_224x224_chwise_dof1.mat
+feature_std_file: ./data/models/VGG_ILSVRC_19_layers/estimated_cnn_feat_std_VGG_ILSVRC_19_layers_ImgSize_224x224_chwise_dof1.mat
 layers:
   - conv1_1
   - conv1_2
