@@ -13,7 +13,7 @@
 <h2 align="center">Inter-individual and inter-site neural code conversion</h2>
 
   <p align="center">
-Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, Misato Tanaka, Yukiyasu Kamitani
+Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, <br> Misato Tanaka, Jong-Yun Park & Yukiyasu Kamitani
 <p align="center">
 
 
@@ -197,6 +197,6 @@ python plot_figure.py
 
 ## Citation
 
-Wang, H., Ho, J. K., Cheng, F. L., Aoki, S. C., Muraki, Y., Tanaka, M., & Kamitani, Y. (2024). Inter-individual and inter-site neural code conversion without shared stimuli. arXiv preprint arXiv:2403.11517.
+Wang, H., Ho, J. K., Cheng, F. L., Aoki, S. C., Muraki, Y., Tanaka, M., Park, J.-Y., & Kamitani, Y. (2025). Inter-individual and inter-site neural code conversion without shared stimuli. *Nature Computational Science, 5*, 534–546. https://doi.org/10.1038/s43588-025-00826-5
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
