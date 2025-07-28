@@ -13,7 +13,7 @@
 <h2 align="center">Inter-individual and inter-site neural code conversion</h2>
 
   <p align="center">
-Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, <br> Misato Tanaka, Jong-Yun Park & Yukiyasu Kamitani
+Haibao Wang, Jun Kai Ho, Fan L. Cheng, Shuntaro C. Aoki, Yusuke Muraki, <br>Misato Tanaka, Jong-Yun Park & Yukiyasu Kamitani
 <p align="center">
 
 
