@@ -4,9 +4,13 @@ import argparse
 import json
 import urllib.request
 import hashlib
+from urllib.error import URLError, HTTPError
 from typing import Union
 
 from tqdm import tqdm
+
+FIGSHARE_URL_PREFIX = 'https://figshare.com/ndownloader/files/'
+FIGSHARE_FALLBACK_PREFIX = 'https://ndownloader.figshare.com/files/'
 
 
 def main(cfg):
@@ -38,16 +42,53 @@ def main(cfg):
 def download_file(url: str, destination: str, progress_bar: bool = True, md5sum: Union[str, None] = None) -> None:
     '''Download a file.'''
 
+    candidate_urls = [url]
+    fallback_url = get_figshare_fallback_url(url)
+    if fallback_url is not None:
+        candidate_urls.append(fallback_url)
+
+    last_error = None
+    for attempt, candidate_url in enumerate(candidate_urls, start=1):
+        try:
+            _download_file_once(candidate_url, destination, progress_bar=progress_bar, md5sum=md5sum)
+            return
+        except (OSError, ValueError, URLError, HTTPError) as error:
+            last_error = error
+            if os.path.exists(destination):
+                os.remove(destination)
+            if attempt == len(candidate_urls):
+                break
+            print(f'Download failed from {candidate_url}: {error}')
+            print(f'Retrying with fallback URL: {candidate_urls[attempt]}')
+
+    raise RuntimeError(f'Failed to download {destination} from all candidate URLs') from last_error
+
+
+def get_figshare_fallback_url(url: str) -> Union[str, None]:
+    if not url.startswith(FIGSHARE_URL_PREFIX):
+        return None
+    return url.replace(FIGSHARE_URL_PREFIX, FIGSHARE_FALLBACK_PREFIX, 1)
+
+
+def _download_file_once(url: str, destination: str, progress_bar: bool = True, md5sum: Union[str, None] = None) -> None:
     response = urllib.request.urlopen(url)
-    file_size = int(response.info()["Content-Length"])
+    file_size_header = response.info().get("Content-Length")
+    file_size = int(file_size_header) if file_size_header is not None else None
 
     def _show_progress(block_num, block_size, total_size):
         downloaded = block_num * block_size
         if total_size > 0:
-            progress_bar.update(downloaded - progress_bar.n)
+            progress.update(downloaded - progress.n)
 
-    with tqdm(total=file_size, unit='B', unit_scale=True, desc=destination, ncols=100) as progress_bar:
-        urllib.request.urlretrieve(url, destination, _show_progress)
+    with tqdm(
+        total=file_size,
+        unit='B',
+        unit_scale=True,
+        desc=destination,
+        ncols=100,
+        disable=not progress_bar,
+    ) as progress:
+        urllib.request.urlretrieve(url, destination, _show_progress if progress_bar else None)
 
     if md5sum is not None:
         md5_hash = hashlib.md5()
