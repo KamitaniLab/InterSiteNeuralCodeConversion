@@ -3,12 +3,12 @@ from glob import glob
 import shutil
 import argparse
 import json
-import urllib.request
-import hashlib
 from typing import Union
 
-from bdpy.dataset.utils import download_file
-from tqdm import tqdm
+from bdpy.dataset.utils import download_file as bdpy_download_file
+
+FIGSHARE_URL_PREFIX = 'https://figshare.com/ndownloader/files/'
+FIGSHARE_FALLBACK_PREFIX = 'https://ndownloader.figshare.com/files/'
 
 
 def main(cfg):
@@ -54,6 +54,35 @@ def main(cfg):
                     else:
                         dest = './'
                     shutil.unpack_archive(output, extract_dir=dest)
+
+
+def download_file(url: str, destination: str, progress_bar: bool = True, md5sum: Union[str, None] = None) -> None:
+    candidate_urls = [url]
+    fallback_url = get_figshare_fallback_url(url)
+    if fallback_url is not None:
+        candidate_urls.append(fallback_url)
+
+    last_error = None
+    for attempt, candidate_url in enumerate(candidate_urls, start=1):
+        try:
+            bdpy_download_file(candidate_url, destination, progress_bar=progress_bar, md5sum=md5sum)
+            return
+        except (OSError, ValueError) as error:
+            last_error = error
+            if os.path.exists(destination):
+                os.remove(destination)
+            if attempt == len(candidate_urls):
+                break
+            print(f'Download failed from {candidate_url}: {error}')
+            print(f'Retrying with fallback URL: {candidate_urls[attempt]}')
+
+    raise RuntimeError(f'Failed to download {destination} from all candidate URLs') from last_error
+
+
+def get_figshare_fallback_url(url: str) -> Union[str, None]:
+    if not url.startswith(FIGSHARE_URL_PREFIX):
+        return None
+    return url.replace(FIGSHARE_URL_PREFIX, FIGSHARE_FALLBACK_PREFIX, 1)
 
 
 if __name__ == '__main__':
